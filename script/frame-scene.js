@@ -5,9 +5,13 @@ import SystemState from './state-machine.js';
 
 class FrameScene extends Phaser.Scene {
     create() {
-        this.frameImage = this.add.image(0, 0, 'frame');
-        this.frameImage.setOrigin(0, 0);
-        this.frameImage.setVisible(false);
+        this.frameMap = this.make.tilemap({key: "computerFrameJson"});
+        const tileset = this.frameMap.addTilesetImage('Frame', 'computerFrameTiles');
+        this.frameLayer = this.frameMap.createStaticLayer('Frame', tileset, 0, -4);
+        this.folderLayer = this.frameMap.createStaticLayer('Folder', tileset, undefined, 0);
+        
+        this.frameLayer.setVisible(false);
+        this.folderLayer.setVisible(false);
     }
     update(time, delta) {
         
