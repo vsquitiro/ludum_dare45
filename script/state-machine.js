@@ -4,6 +4,7 @@
 import DebugScene from './debug.js';
 import BlankScreenScene from './blank-screen-scene.js';
 import FrameScene from './frame-scene.js';
+import SystemScene from './system-scene.js';
 
 
 //States
@@ -25,7 +26,8 @@ const SystemState = new StateMachine({
         { name: 'login', from: login, to: camera },
         { name: 'viewCameras', from: [directory, system, comms], to: camera },
         { name: 'viewDirectory', from: [camera, system, comms], to: directory },
-        { name: 'viewSystem', from: [directory, camera, comms], to: system },
+        //{ name: 'viewSystem', from: [directory, camera, comms], to: system },
+        { name: 'viewSystem', from: menu, to: system},
         { name: 'viewComms', from: [directory, system, camera], to: comms },
         //win
         //lose
@@ -57,7 +59,11 @@ const SystemState = new StateMachine({
         onLogin: function() { console.log('I vaporized') },
         onViewCameras: function() { console.log('I condensed') },
         onViewDirectory: function() { console.log('I condensed') },
-        onViewSystem: function() { console.log('I condensed') },
+        
+        onViewSystem: function() {
+            this.game.scene.add('systemScene', SystemScene, true);
+        },
+
         onViewComms: function() { console.log('I condensed') },
     }
 });
