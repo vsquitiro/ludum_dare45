@@ -1,4 +1,9 @@
+/** @type {import("../typings/phaser")} */
+/** @type {import("../typings/stateMachine")} */
+
 import DebugScene from './debug.js';
+import BlankScreenScene from './blank-screen-scene.js';
+import FrameScene from './frame-scene.js';
 
 
 //States
@@ -27,10 +32,13 @@ const SystemState = new StateMachine({
     ],
     data: {
         game: null,
+        timeEnteredBlank: null,
+        timeCursorStart: null,
     },
     methods: {
         // Game state management
         setGame: function(game) { this.game = game; },
+        startCursor: function() { this.timeCursorStart = performance.now(); },
 
         // Transition handlers
         onLeaveMenu: function() {
@@ -39,7 +47,12 @@ const SystemState = new StateMachine({
         onDebugTest: function() {
             this.game.scene.add('debugScene', DebugScene, true);
         },
-        onGameStart: function() { console.log('I melted') },
+        onGameStart: function() {
+            this.game.scene.add('blankScreenScene', BlankScreenScene, true);
+            // this.game.scene.add('frameScene', FrameScene, true);
+
+            this.timeEnteredBlank = performance.now();
+        },
         onBoot: function() { console.log('I froze') },
         onLogin: function() { console.log('I vaporized') },
         onViewCameras: function() { console.log('I condensed') },

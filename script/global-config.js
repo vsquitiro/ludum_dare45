@@ -1,13 +1,25 @@
 const screenWidth = 800;
 const screenHeight = 600;
+const blankScreenTime = 10000;
+const cursorTime = 20000;
+const lightOffTime = 30000;
+const frameWidth = 100;
 
 
 export default {
     screenWidth,
-    screenHeight
+    screenHeight,
+    blankScreenTime,
+    cursorTime,
+    lightOffTime,
+    frameWidth,
 };
 
 export {
     screenWidth,
-    screenHeight
+    screenHeight,
+    blankScreenTime,
+    cursorTime,
+    lightOffTime,
+    frameWidth,
 };
