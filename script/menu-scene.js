@@ -14,10 +14,12 @@ class MenuScene extends Phaser.Scene {
 
         this.input.once('pointerdown', function() {
             console.log("Clicked, starting game");
-            // SystemState.gameStart();
-            SystemState.debugTest();
+            //SystemState.gameStart();
+            //SystemState.debugTest();
+            SystemState.viewSystem();
         }, this);
     }
 }
 
 export default MenuScene;
+
