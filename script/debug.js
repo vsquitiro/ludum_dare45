@@ -83,6 +83,7 @@ class DebugScene extends Phaser.Scene {
 }
 
 var allSlimes = [];
+var rnd = Phaser.Math.RND;
 
 var colors = [0xffffff,0xc0c0c0,0x808080,0x000000,0xff0000,0x800000,0xffff00,0x808000,0x00ff00,0x008000,0x00ffff,0x008080,0x0000ff,0x000080,0xff00ff,0x800080];
 var eyeKeys = ['eye0','eye1','eye2','eye3','eye4','eye5','eye6'];

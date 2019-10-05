@@ -30,8 +30,18 @@ function preload() {
     // Add all assets to be loaded here.
     this.load.image('slime', 'assets/slime.png');
     this.load.spritesheet('mass','assets/slimeTiles.png', {frameWidth: 32, frameHeight: 32});
+<<<<<<< HEAD
     this.load.spritesheet('border','assets/bordertileset.png', {frameWidth: 32, frameHeight: 32});
     this.load.image('frame', 'assets/frame-placeholder.png')
+||||||| merged common ancestors
+    this.load.image('border','assets/bordertileset.png', {frameWidth: 32, frameHeight: 32});
+    this.load.image('frame', 'assets/frame-placeholder.png')
+=======
+    this.load.image('border','assets/bordertileset.png', {frameWidth: 32, frameHeight: 32});
+    
+    this.load.image('computerFrameTiles','assets/filessprites.png');
+    this.load.tilemapTiledJSON('computerFrameJson', 'assets/Frame.json');
+>>>>>>> 470a3ffa66ac5050ea3a7427436d12a6f6f145bb
 }
 
 function create() {
