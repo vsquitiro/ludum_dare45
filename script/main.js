@@ -1,3 +1,5 @@
+/** @type {import("../typings/phaser")} */
+
 import SystemState from "./state-machine.js";
 import config from './global-config.js';
 import loader from './loader-scene.js';
