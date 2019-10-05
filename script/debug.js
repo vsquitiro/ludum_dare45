@@ -29,13 +29,9 @@ class DebugScene extends Phaser.Scene {
         }
     */
 
-        classySlime.setSprite(this,'mass');
-        //classySlime.setBody(this.add.sprite(300,300,'mass'));
-        //classySlime.setEyes(this.add.sprite(300,300,'mass'));
-        classySlime.setColor();
+        classySlime.setSpriteAndColor(this,'mass');
     
-        // classySlime2.setSprite(this.add.sprite(100,500,'mass'));
-        // classySlime2.setColor();
+        classySlime2.setSpriteAndColor(this,'mass');
 
         // classySlime3.setSprite(this.add.sprite(200,500,'mass'));
         // classySlime3.setColor();
@@ -89,9 +85,9 @@ class DebugScene extends Phaser.Scene {
     update () {
        // workers.anims.play('bounce',true);
         //allSlimes.anims.play('bounce',true);
-        classySlime.bod.play('bounce',true);
-        classySlime.eyes.play(classySlime.eyesKey,true);
-        // classySlime2.bod.play('bounce',true);
+        classySlime.animate();
+        classySlime2.bod.play('bounce',true);
+        classySlime2.eyes.play(classySlime2.eyesKey,true);
         // classySlime3.bod.play('bounce',true);
         // classySlime4.bod.play('bounce',true);
         // classySlime5.bod.play('bounce',true);
@@ -100,6 +96,10 @@ class DebugScene extends Phaser.Scene {
     }
 }
 var rnd = Phaser.Math.RND;
+rnd.between(0,1);
+rnd.between(0,1);
+rnd.between(0,1);
+rnd.between(0,1);
 var workers;
 var allSlimes;
 
@@ -150,6 +150,16 @@ class Slime {
         this.setEyes(scene,key);
      //   this.setMouth(scene,key);
      //   this.setHair(scene,key);
+    }
+
+    setSpriteAndColor(scene,key) {
+        this.setSprite(scene,key);
+        this.setColor();
+    }
+
+    animate() {
+        this.bod.play('bounce',true);
+        classySlime.eyes.play(classySlime.eyesKey,true);
     }
 }
 
