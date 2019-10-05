@@ -49,7 +49,7 @@ const SystemState = new StateMachine({
         },
         onGameStart: function() {
             this.game.scene.add('blankScreenScene', BlankScreenScene, true);
-            // this.game.scene.add('frameScene', FrameScene, true);
+            this.game.scene.add('frameScene', FrameScene, true);
 
             this.timeEnteredBlank = performance.now();
         },

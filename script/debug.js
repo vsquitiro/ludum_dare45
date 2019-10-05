@@ -3,6 +3,14 @@
 import {screenHeight, screenWidth} from './global-config.js';
 import SystemState from './state-machine.js';
 
+var classySlime
+var classySlime2
+var classySlime3
+var classySlime4
+var classySlime5
+var classySlime6
+var classySlime7
+
 class DebugScene extends Phaser.Scene {
     init() {
         console.log("Debug Init");
@@ -10,6 +18,13 @@ class DebugScene extends Phaser.Scene {
     create() {
         console.log("Debug Create");
         this.add.text(0, 0, 'Debug');
+        classySlime = new Slime(0,0,false);
+        classySlime2 = new Slime(0,0,false);
+        classySlime3 = new Slime(0,0,false);
+        classySlime4 = new Slime(0,0,false);
+        classySlime5 = new Slime(0,0,false);
+        classySlime6 = new Slime(0,0,false);
+        classySlime7 = new Slime(0,0,false);
 
         var config = {
             key: 'wiggle',
@@ -101,7 +116,6 @@ class DebugScene extends Phaser.Scene {
         // classySlime7.bod.play('bounce',true);
     }
 }
-var rnd = Phaser.Math.RND;
 var workers;
 var allSlimes;
 
@@ -111,6 +125,7 @@ var eyeKeys = ['eye0','eye1','eye2','eye3','eye4','eye5','eye6'];
 
 class Slime {
     constructor(ID,RoomID,traitor) {
+        var rnd = Phaser.Math.RND;
         this.ID = ID;
         this.RoomID = RoomID;
         this.xPos = Math.random()*280+10;
@@ -154,13 +169,5 @@ class Slime {
      //   this.setHair(scene,key);
     }
 }
-
-var classySlime = new Slime(0,0,false);
-var classySlime2 = new Slime(0,0,false);
-var classySlime3 = new Slime(0,0,false);
-var classySlime4 = new Slime(0,0,false);
-var classySlime5 = new Slime(0,0,false);
-var classySlime6 = new Slime(0,0,false);
-var classySlime7 = new Slime(0,0,false);
 
 export default DebugScene;
