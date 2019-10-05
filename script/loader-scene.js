@@ -34,6 +34,7 @@ function preload() {
     this.load.image('frame', 'assets/frame-placeholder.png')
     this.load.image('computerFrameTiles','assets/filessprites.png');
     this.load.tilemapTiledJSON('computerFrameJson', 'assets/Frame.json');
+    this.load.spritesheet('sysTile','assets/systemtiles.png', {frameWidth: 32, frameHeight: 32});
 }
 
 function create() {
