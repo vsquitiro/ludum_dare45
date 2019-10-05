@@ -1,28 +1,18 @@
 import SystemState from "./state-machine.js";
+import config from './global-config.js';
+import loader from './loader-scene.js';
+import Menu from './menu-scene.js';
 
-var config = {
+const gameConfig = {
     type: Phaser.AUTO,
     parent: "game-container",
-    width:800,
-    height: 600,
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
-    }
+    width: config.screenWidth,
+    height: config.screenHeight,
 };
 
-var game = new Phaser.Game(config);
+const game = new Phaser.Game(gameConfig);
 
-function preload () {
-    this.load.image('slime','assets/slime.png');
-    console.log(SystemState.state);
-}
+game.scene.add('loader', loader, true);
+game.scene.add('menu', Menu, false);
 
-function create () {
-    this.add.image(400,300, 'slime');
-}
-
-function update () {
-
-}
+SystemState.setGame(game);
