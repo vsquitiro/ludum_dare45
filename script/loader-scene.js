@@ -30,6 +30,7 @@ function preload() {
     // Add all assets to be loaded here.
     this.load.image('slime', 'assets/slime.png');
     this.load.spritesheet('mass','assets/slimeTiles.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('file','assets/filessprites.png', {frameWidth: 32, frameHeight: 32});
     this.load.image('border','assets/bordertileset.png', {frameWidth: 32, frameHeight: 32});
     this.load.image('frame', 'assets/frame-placeholder.png')
 }
