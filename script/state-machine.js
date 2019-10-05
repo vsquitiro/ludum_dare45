@@ -5,6 +5,7 @@ import DebugScene from './debug.js';
 import BlankScreenScene from './blank-screen-scene.js';
 import FrameScene from './frame-scene.js';
 import SystemScene from './system-scene.js';
+import LoginScene from './login-scene.js';
 
 
 //States
@@ -36,6 +37,8 @@ const SystemState = new StateMachine({
         game: null,
         timeEnteredBlank: null,
         timeCursorStart: null,
+        timeLoginStart: null,
+        lightsOn: false,
     },
     methods: {
         // Game state management
@@ -55,7 +58,15 @@ const SystemState = new StateMachine({
 
             this.timeEnteredBlank = performance.now();
         },
-        onBoot: function() { console.log('I froze') },
+        onLeaveBlankScreen: function() {
+            this.game.scene.remove('blankScreenScene');
+        },
+        onBoot: function() {
+            this.game.scene.add('loginScene', LoginScene, true);
+            this.game.scene.bringToTop('frameScene');
+
+            this.timeLoginStart = performance.now();
+        },
         onLogin: function() { console.log('I vaporized') },
         onViewCameras: function() { console.log('I condensed') },
         onViewDirectory: function() { console.log('I condensed') },

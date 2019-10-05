@@ -28,12 +28,11 @@ function init() {
 function preload() {
     console.log("Loader Preload");
     // Add all assets to be loaded here.
-    this.load.image('slime', 'assets/slime.png');
     this.load.spritesheet('mass','assets/slimeTiles.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('border','assets/bordertileset.png', {frameWidth: 32, frameHeight: 32});
-    this.load.image('frame', 'assets/frame-placeholder.png')
-    this.load.image('computerFrameTiles','assets/filessprites.png');
-    this.load.tilemapTiledJSON('computerFrameJson', 'assets/Frame.json');
+
+    this.load.tilemapTiledJSON('systemTilemap', 'assets/system.json');
+    this.load.spritesheet('system','assets/systemtiles.png', {frameWidth: 32, frameHeight: 32});
 }
 
 function create() {
