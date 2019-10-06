@@ -32,10 +32,11 @@ class SlimeData {
         var eyeKeys = [0,1,2,3,4,5,6];
         var mouthKeys = [0,1,2,3,4,5,6];
         var hairKeys = [0,1,2,3,4,5];
+        var roomID = [0,1,2,3];
 
         var rnd = Phaser.Math.RND;
         this.ID = ID;
-        this.roomID = -1;
+        this.roomID = rnd.pick(roomID);
         this.eyeKey = rnd.pick(eyeKeys);
         this.mouthKey = rnd.pick(mouthKeys);
         this.hairKey = rnd.pick(hairKeys);
@@ -53,12 +54,17 @@ class SlimeData {
 
 class SlimeVisual {
     constructor(slimeData,scene) {
+        var xRand = [0,1,2,3,4,5,6,7,8]
+        var yRand = [1,2,3,4];
+        var rnd = Phaser.Math.RND;
         this.slimeData = slimeData;
         this.scene = scene;
 
-
-        this.xPos = c2px(3);
-        this.yPos = c2py(3);
+        this.xPos = c2px(rnd.pick(xRand));
+        this.yPos = c2py(rnd.pick(yRand));
+        this.xRoom;
+        this.yRoom;
+        this.adjustPos(this.xPos,this.yPos);
         // this.xPos = c2px(-10);
         // this.yPos = c2py(-10);
         
@@ -131,20 +137,41 @@ class SlimeVisual {
     //     }
     // }
 
+    adjustPos(x,y) {
+        var room = this.slimeData.roomID;
+        console.log('slime view: ' + room);
+        if(room == 0) {
+            this.xRoom = x;
+            this.yRoom = y;
+        } else if (room == 1) {
+            this.xRoom = x + 288;
+            this.yRoom = y;
+        } else if (room == 2) {
+            this.xRoom = x;
+            this.yRoom = y + 160;
+        } else if (room == 3) {
+            this.xRoom = x + 288;
+            this.yRoom = y + 160;
+        }
+        console.log(this.ID);
+        console.log(this.xRoom);
+        console.log(this.yRoom);
+    }
+
     setBody(scene) {
-        this.bod = this.scene.add.sprite(this.xPos,this.yPos);
+        this.bod = this.scene.add.sprite(this.xRoom,this.yRoom);
     }
 
     setEyes(scene) {
-        this.eyes = this.scene.add.sprite(this.xPos,this.yPos);
+        this.eyes = this.scene.add.sprite(this.xRoom,this.yRoom);
     }
 
     setMouth(scene) {
-        this.mouth = this.scene.add.sprite(this.xPos,this.yPos);
+        this.mouth = this.scene.add.sprite(this.xRoom,this.yRoom);
     }
 
     setHair(scene) {
-        this.hair = this.scene.add.sprite(this.xPos,this.yPos);
+        this.hair = this.scene.add.sprite(this.xRoom,this.yRoom);
     }
 
     setColor() {
