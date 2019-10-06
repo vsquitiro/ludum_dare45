@@ -1,11 +1,11 @@
 const screenWidth = 800;
 const screenHeight = 600;
-const blankScreenTime = 3000;
-const cursorTime = 20000;
-const lightOffTime = 0; //30000;
+const blankScreenTime = 10000;
+const cursorTime = 15000;
+const lightOffTime = 30000;
 const frameWidth = 96;
-const correctUsername = "jdoe";
-const correctPassword = "ppppass";
+const correctUsername = "phaboodus";
+const correctPassword = "strongdoor004";
 
 
 export default {

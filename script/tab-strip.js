@@ -81,7 +81,7 @@ class Tab {
             );
             sprite.setOrigin(0, 0);
             if (!this.active) {
-                sprite.setInteractive();
+                sprite.setInteractive({ cursor: 'pointer' });
                 sprite.on('pointerdown', function() {
                     this.onclick();
                 }, this);
