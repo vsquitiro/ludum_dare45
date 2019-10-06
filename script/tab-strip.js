@@ -42,7 +42,7 @@ class TabStrip {
                 tab,
                 tab.name == activeTab,
                 4 + (4 * index),
-                3
+                3.5
             );
         });
 
@@ -94,7 +94,7 @@ class Tab {
             yCell * 32 + 16,
             this.tabConfig.name
         );
-        this.tabText.setColor(this.active ? 0x000000 : 0xffffff);
+        this.tabText.setColor(this.active ? 'black' : 'white');
         this.tabText.setOrigin(0.5, 0.5);
     }
 

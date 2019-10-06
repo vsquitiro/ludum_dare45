@@ -1,5 +1,5 @@
 const xStart = 3.5 * 32;
-const yStart = 4 * 32;
+const yStart = 4.5 * 32;
 
 function c2px(x) {
     return x * 32 + xStart;
