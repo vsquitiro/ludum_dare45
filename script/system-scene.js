@@ -135,6 +135,14 @@ class RepairTracker {
         this.scene = scene;
     }
 
+    getPower() {
+        return this.powerBar.oldLevel;
+    }
+
+    getPowerPercentage() {
+        return this.powerBar.oldLevel / this.powerBar.powerMax;
+    }
+
     commitRepairs() {
         this.powerBar.commitRepairs();
     }
@@ -288,7 +296,7 @@ class PowerBar {
     }
 
     incrementPower() {
-        if (this.UR.currentSpendable != 0) {
+        if (this.UR.currentSpendable > 0 && (this.powerLevel + 1) <= this.powerMax) {
             this.updatePower(this.powerLevel+1);
             this.UR.currentSpendable -= 1;
             this.currentSpent += 1;
@@ -296,7 +304,7 @@ class PowerBar {
     }
 
     decrementPower() {
-        if (this.currentSpent !=0) {
+        if (this.currentSpent > 0) {
             this.updatePower(this.powerLevel-1);
             this.UR.currentSpendable += 1;
             this.currentSpent -= 1;
@@ -376,7 +384,6 @@ class UserRepair {
 }
 
 
-
 var repairSystem;
 
 class SystemScene extends Phaser.Scene {
@@ -391,6 +398,7 @@ class SystemScene extends Phaser.Scene {
         this.repairSound = this.sound.add('click2');
 
         repairSystem = new UserRepair(this);
+        SystemState.repairSystem = repairSystem;
  
         var barKeys = ['bar0','bar1','bar2','bar3','bar4'];
         var speechTopKeys = ['sTop0','sTop1','sTop2','sTop3'];

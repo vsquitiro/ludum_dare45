@@ -1,6 +1,7 @@
 /** @type {import("../typings/phaser")} */
 /** @type {import("../typings/stateMachine")} */
 
+import globalConfig from './global-config.js';
 import DebugScene from './debug.js';
 import BlankScreenScene from './blank-screen-scene.js';
 import FrameScene from './frame-scene.js';
@@ -42,6 +43,7 @@ const SystemState = new StateMachine({
         timeCursorStart: null,
         timeLoginStart: null,
         lightsOn: false,
+        repairSystem: null,
     },
     methods: {
         // Game state management
@@ -61,7 +63,7 @@ const SystemState = new StateMachine({
             this.game.scene.add('cameraScene', CameraScene, true);
             this.game.scene.add('systemScene', SystemScene, false);
             this.game.scene.add('frameScene', FrameScene, true);
-            this.timeLoginStart = performance.now();
+            this.timeLoginStart = performance.now() - globalConfig.lightOffTime;
 
             this.game.scene.bringToTop('frameScene');
         },
