@@ -129,18 +129,18 @@ class RepairTracker {
         this.yPos = yPos;
         var xPB = xPos + 64;
         var yPB = yPos + 64;
-        this.PowerBar = new PowerBar((funct + 'Bar'),powerLevel,xPB,yPB,barChunk,scene,UR);
+        this.powerBar = new PowerBar((funct + 'Bar'),powerLevel,xPB,yPB,barChunk,scene,UR);
         scene.add.text(xPos+16, yPos + 4,funct);
         scene.add.text(xPos-24, (yPos+26),'Current');
         this.scene = scene;
     }
 
     commitRepairs() {
-        this.PowerBar.commitRepairs();
+        this.powerBar.commitRepairs();
     }
 
     animate() {
-        this.PowerBar.animate();
+        this.powerBar.animate();
     }
 }
 
@@ -243,6 +243,7 @@ class PowerBar {
 
     commitRepairs() {
         this.oldLevel = this.powerLevel;
+        this.currentSpent = 0;
     }
 
     buildBar(power,bar) {
@@ -283,8 +284,7 @@ class PowerBar {
         } else {
             this.powerLevel = this.powerMax;
         }
-        var scene = this.scene
-        scene.repairSound.play();
+        this.scene.repairSound.play();
     }
 
     incrementPower() {
@@ -338,16 +338,32 @@ class UserRepair {
     }
 
     commitRepairs() {
+        this.scene.repairSound.play();
         for (var i=0;i<this.allSystems.length;i++) {
             this.allSystems[i].commitRepairs();
         }
         this.checkRepairRate();
         this.currentSpent =0;
+        this.currentSystemPower += this.repairRate;
+        this.repairBar.powerLevel = this.currentSystemPower;
         this.currentSpendable = this.repairRate;
     }
 
     checkRepairRate() {
-
+        var repairLevel = this.repair.powerBar.powerLevel;
+        if (repairLevel < 2) {
+            console.log('repair level 1');
+            this.repairRate = 1;
+        } else if (repairLevel < 8) {
+            console.log('repair level 2');
+            this.repairRate = 2;
+        } else if (repairLevel < 20) {
+            console.log('repair level 3');
+            this.repairRate = 3;
+        } else {
+            console.log('repair level 4');
+            this.repairRate = 4;
+        }
     }
 
     animate() {
