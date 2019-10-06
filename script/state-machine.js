@@ -59,7 +59,7 @@ const SystemState = new StateMachine({
             this.game.scene.add('debugScene', DebugScene, true);
         },
         onShortcut: function() {
-            this.allSlimes = createSlimes(10);
+            this.allSlimes = createSlimes(1);
             this.currentScreen = camera;
             this.game.scene.add('cameraScene', CameraScene, true);
             this.game.scene.add('systemScene', SystemScene, false);

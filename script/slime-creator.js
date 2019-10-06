@@ -1,3 +1,5 @@
+import {c2px, c2py} from './inner-screen-positions.js';
+
 class SlimeData {
     constructor(ID,traitor) {
         var colors = [0xffffff,0xc0c0c0,0x808080,0x000000,0xff0000,0x800000,0xffff00,0x808000,0x00ff00,0x008000,0x00ffff,0x008080,0x0000ff,0x000080,0xff00ff,0x800080];
@@ -25,8 +27,14 @@ class SlimeVisual {
     constructor(slimeData,scene) {
         this.slimeData = slimeData;
         this.scene = scene;
-        this.xPos = c2px(-10);
-        this.yPos = c2py(-10);
+
+
+        this.xPos = c2px(3);
+        this.yPos = c2py(3);
+        // this.xPos = c2px(-10);
+        // this.yPos = c2py(-10);
+        
+
         this.eyeIdx = 2 + 6*(slimeData.eyeKey);
         this.eyeKey = 'eye' + this.slimeData.ID;
         this.mouthIdx = 4 + 6*(slimeData.mouthKey);
@@ -34,10 +42,16 @@ class SlimeVisual {
         this.hairIdx = 6 + 6*(slimeData.hairKey);
         this.hairKey = 'hair' + this.slimeData.ID;
         this.bounceKey = 'bounce' + this.slimeData.ID;
-        this.bod;
-        this.eyes;
-        this.mouth;
-        this.hair;
+
+        this.tint = slimeData.tint;
+        this.tintHair = slimeData.tintHair;
+
+        this.setSpriteAndColor(scene,'mass')
+
+        // this.bod = scene.add.sprite(this.xPos,this.yPox,'mass');
+        // this.eyes = scene.add.sprite(this.xPos,this.yPox,'mass');
+        // this.mouth = scene.add.sprite(this.xPos,this.yPox,'mass');
+        // this.hair = scene.add.sprite(this.xPos,this.yPox,'mass');
 
         //create eye animations
         this.scene.anims.create({
@@ -64,7 +78,7 @@ class SlimeVisual {
         })
 
         //create body animation
-        this.anims.create({
+        this.scene.anims.create({
             key: this.bounceKey,
             frames: this.scene.anims.generateFrameNumbers('mass', {start: 0, end: 1}),
             frameRate: 5,
@@ -72,22 +86,22 @@ class SlimeVisual {
         })
     }
 
-    setPosition(x,y) {
-        room = this.slimeData.roomID;
-        if (room == 0) {
-            this.xPos = x;
-            this.yPos = y;
-        } else if(room == 1) {
-            this.xPos = x+288;
-            this.yPos = y;
-        } else if (room ==2) {
-            this.xPos = x;
-            this.yPos = y+160;
-        } else if (room ==3) {
-            this.xPos = x+288;
-            this.yPos = y+160
-        }
-    }
+    // setPosition(x,y) {
+    //     var room = this.slimeData.roomID;
+    //     if (room == 0) {
+    //         this.xPos = x;
+    //         this.yPos = y;
+    //     } else if(room == 1) {
+    //         this.xPos = x+288;
+    //         this.yPos = y;
+    //     } else if (room ==2) {
+    //         this.xPos = x;
+    //         this.yPos = y+160;
+    //     } else if (room ==3) {
+    //         this.xPos = x+288;
+    //         this.yPos = y+160
+    //     }
+    // }
 
     setBody(scene) {
         this.bod = this.scene.add.sprite(this.xPos,this.yPos);
