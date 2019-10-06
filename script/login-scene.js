@@ -2,6 +2,7 @@
 
 import globalConfig from './global-config.js';
 import SystemState from './state-machine.js';
+import ErrorSound from './error-sound.js';
 
 const focusColor = 0x03c2fc;
 const wrongColor = 0xfc0303;
@@ -13,6 +14,9 @@ class LoginScene extends Phaser.Scene {
     maxChars = 8;
 
     create() {
+        // Audio
+        this.errorSound = new ErrorSound(this);
+
         // Add logo
         this.logoMap = this.make.tilemap({key: "systemTilemap"});
         const tileset = this.logoMap.addTilesetImage('System', 'sysTile');
@@ -171,6 +175,7 @@ class LoginScene extends Phaser.Scene {
         if (this.typedUsername == globalConfig.correctUsername && this.typedPassword == globalConfig.correctPassword) {
 
         } else {
+            this.errorSound.playErrorSound();
             this.updateText("", "username");
             this.usernameBox.setStrokeStyle(2, wrongColor);
             this.updateText("", "password");

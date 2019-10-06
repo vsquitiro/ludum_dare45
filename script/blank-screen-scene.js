@@ -10,6 +10,7 @@ class BlankScreenScene extends Phaser.Scene {
     timePerCharacter = 250;
     cursorBlinkTime = 500;
     startPos = globalConfig.frameWidth + 10;
+    booting = false;
 
     init() {
         console.log("Blank Screen Init");
@@ -20,21 +21,27 @@ class BlankScreenScene extends Phaser.Scene {
         this.cursor.setVisible(false);
         this.bootTextDisplay = this.add.text(this.startPos, this.startPos, this.currentTextDisplayed);
         this.bootTextDisplay.setOrigin(0,0);
+        this.startupSound = this.sound.add('startup');
     }
     update(time, delta) {
         const blankStart = SystemState.timeEnteredBlank;
         const cursorStart = SystemState.timeCursorStart;
 
-        if (SystemState.state == "login") {
-            this.blinkCursor(time, cursorStart);
-            this.renderText(time, cursorStart);
+        if (this.booting) {
+            // noop
         } else if (cursorStart) {
             if (time - cursorStart > globalConfig.cursorTime) {
-                SystemState.boot();
+                this.booting = true;
+                this.cursor.setVisible(false);
+                this.bootTextDisplay.setVisible(false);
+                this.startupSound.play();
+                this.startupSound.on('complete', function() {
+                    SystemState.boot();
+                });
+            } else {
+                this.blinkCursor(time, cursorStart);
+                this.renderText(time, cursorStart);
             }
-
-            this.blinkCursor(time, cursorStart);
-            this.renderText(time, cursorStart);
         } else if (blankStart) {
             if (time - blankStart > globalConfig.blankScreenTime) {
                 SystemState.startCursor();
