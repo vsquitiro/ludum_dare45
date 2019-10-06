@@ -38,6 +38,7 @@ function preload() {
     this.load.audio('error1', 'assets/Error1.mp3');
     this.load.audio('error2', 'assets/Error2.mp3');
     this.load.audio('startup', 'assets/StartUp.mp3');
+    this.load.audio('click2', 'assets/Click2.mp3');
 }
 
 function create() {

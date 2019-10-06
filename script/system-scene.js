@@ -3,16 +3,44 @@
 import {screenHeight, screenWidth} from './global-config.js';
 import SystemState from './state-machine.js';
 
-class repairTracker {
+class Blobby {
+    constructor(xPos,yPos,scene) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.scene = scene;
+        this.sprites = [];
+        for (var i=0; i<4; i++) {
+            if (i<2) {
+                var x = xPos + i*32;
+                var y = yPos;
+            } else {
+                var x = xPos + (i-2)*32;
+                var y = yPos+32;
+            }
+
+            this.sprites.push(scene.add.sprite(x,y,'sysTile'));
+        }
+    }
+
+    animate() {
+        this.sprites[0].play('helperTL',true);
+        this.sprites[1].play('helperTR',true);
+        this.sprites[2].play('helperBL',true);
+        this.sprites[3].play('helperBR',true);
+    }
+}
+
+class RepairTracker {
     constructor(funct,xPos,yPos,powerLevel,barChunk,scene) {
         this.funct = funct;
         this.xPos = xPos;
         this.yPos = yPos;
         var xPB = xPos + 64;
         var yPB = yPos + 64;
-        this.PowerBar = new PowerBar(funct,powerLevel,xPB,yPB,barChunk,scene)
+        this.PowerBar = new PowerBar((funct + 'Bar'),powerLevel,xPB,yPB,barChunk,scene)
         scene.add.text(xPos+16, yPos,funct);
         scene.add.text(xPos-24, (yPos+26),'Current');
+        this.scene = scene;
     }
 
     animate() {
@@ -29,6 +57,7 @@ class PowerButton {
         this.sprite = scene.add.sprite(xPos,yPos,'sysTile');
         this.powerBar = powerBar;
         this.sprite.setInteractive().on('pointerdown', () => this.changePower());
+        this.scene = scene;
     }
 
     changePower() {
@@ -48,6 +77,46 @@ class PowerButton {
     }
 
 }
+
+class RepairTotal {
+    constructor(ID,powerLevel,xPos,yPos,scene) {
+        this.ID = ID;
+        this.powerLevel = powerLevel;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.scene = scene;
+        this.chunks = [];
+        for (var i=0;i<25;i++) {
+            var xBar = xPos + 24*i;
+            this.chunks.push(scene.add.sprite(xBar,yPos,'border').setScale(0.75));
+        }
+        scene.add.text(xPos+170, (yPos+20),'Status of Full System Repair');
+    }
+
+    animate() {
+        var powerTracker = this.powerLevel;
+        for (var i=0;i<this.chunks.length; i++) {
+            var currentChunk = this.chunks[i];
+            if (powerTracker >= 4) {
+                currentChunk.play('bar4',true);
+                powerTracker -= 4;
+            } else if (powerTracker==3) {
+                currentChunk.play('bar3',true);
+                powerTracker = 0;
+            } else if (powerTracker==2) {
+                currentChunk.play('bar2',true);
+                powerTracker = 0;
+            } else if (powerTracker==1) {
+                currentChunk.play('bar1',true);
+                powerTracker = 0;
+            } else {
+                currentChunk.play('bar0',true);
+            }
+        }
+    }    
+
+}
+
 class PowerBar {
     constructor(ID,powerLevel,xPos,yPos,barChunk,scene) {
         this.ID = ID;
@@ -67,8 +136,9 @@ class PowerBar {
             var yBar = yPos - 32;
             this.oldChunk.push(scene.add.sprite(xBar,yBar,'border'));
         }
-        this.moreButton = new PowerButton((ID*2),xPos-64,yPos,true,scene,this);
-        this.lessButton = new PowerButton((ID*2+1),xPos-32,yPos,false,scene,this);
+        this.moreButton = new PowerButton((ID + 'Plus'),xPos-64,yPos,true,scene,this);
+        this.lessButton = new PowerButton((ID + 'Minus'),xPos-32,yPos,false,scene,this);
+        this.scene = scene;
     }
 
     buildBar(power,bar) {
@@ -109,6 +179,8 @@ class PowerBar {
         } else {
             this.powerLevel = this.powerMax;
         }
+        var scene = this.scene
+        scene.repairSound.play();
     }
 
     incrementPower() {
@@ -129,10 +201,9 @@ var database;
 var repair;
 var panel;
 
-var blobbyTL;
-var blobbyTR;
-var blobbyBL;
-var blobbyBR;
+var blobbyHelper;
+
+var repairBar;
 
 class SystemScene extends Phaser.Scene {
     init() {
@@ -143,19 +214,22 @@ class SystemScene extends Phaser.Scene {
         console.log("System Create");
         this.add.text(0, 0, 'System');
 
-        blobbyTL = this.add.sprite(200,500,'sysTile');
-        blobbyTR = this.add.sprite(232,500,'sysTile');
-        blobbyBL = this.add.sprite(200,532,'sysTile');
-        blobbyBR = this.add.sprite(232,532,'sysTile');
+        this.repairSound = this.sound.add('click2');
 
-        camera1 = new repairTracker('Camera 1',128,128,0,2,this);
-        camera2 = new repairTracker('Camera 2',304,128,0,2,this);
-        camera3 = new repairTracker('Camera 3',128,228,0,2,this);
-        camera4 = new repairTracker('Camera 4',304,228,0,2,this);
-        doors = new repairTracker('Doors',480,128,0,4,this);
-        //funct,xPos,yPos,powerLevel,barChunk,scene
+        blobbyHelper = new Blobby(118,440,this);
 
-        // classyBar = new PowerBar(0,3,300,300,3,this);
+        camera1 = new RepairTracker('Camera 1',136,128,0,2,this);
+        camera2 = new RepairTracker('Camera 2',308,128,0,2,this);
+        camera3 = new RepairTracker('Camera 3',136,228,0,2,this);
+        camera4 = new RepairTracker('Camera 4',308,228,0,2,this);
+        doors = new RepairTracker('Door Security',480,128,0,4,this);
+        database = new RepairTracker('  Database',480,228,0,4,this);
+        repair = new RepairTracker('System Repair',180,327,0,5,this);
+        panel = new RepairTracker('Panel Access',448,327,0,4,this);
+
+        repairBar = new RepairTotal('Total',45,112,500,this);
+
+         //constructor(ID,powerLevel,xPos,yPos,scene) {;
 
         var barKeys = ['bar0','bar1','bar2','bar3','bar4'];
 
@@ -191,7 +265,7 @@ class SystemScene extends Phaser.Scene {
             repeat: -1
         })
 
-                this.anims.create({
+        this.anims.create({
             key: 'helperTR',
             frames: this.anims.generateFrameNumbers('sysTile',{start:115,end:115}),
             frameRate: 5,
@@ -218,10 +292,12 @@ class SystemScene extends Phaser.Scene {
         camera2.animate();
         camera3.animate();
         camera4.animate();
-        blobbyTL.play('helperTL',true);
-        blobbyTR.play('helperTR',true);
-        blobbyBL.play('helperBL',true);
-        blobbyBR.play('helperBR',true);
+        doors.animate();
+        database.animate();
+        repair.animate();
+        panel.animate();
+        repairBar.animate();
+        blobbyHelper.animate();
     }
 }
 
