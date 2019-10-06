@@ -7,9 +7,75 @@ import TabStrip from './tab-strip.js';
 import {SlimeData, SlimeVisual} from './slime-creator.js';
 
 var slimeDisplay;
+var cameraStatus;
+var room1;
+
+class Room {
+    constructor(ID,xPos,yPos,cams,scene) {
+        this.ID = ID;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.scene = scene;
+        this.cams = cams;
+        this.camLevel = 0;
+        this.camShowing = 0;
+    }
+
+    updatePower(power) {
+        this.camLevel = power;
+        if (power < 1) {
+           const choice = Math.random();
+            if (choice < 0.5) {
+                this.showCam(0);
+            } else {
+                this.showCam(1);
+            }
+        } else if (power < 2) {
+            const choice = Math.random();
+            if (choice < 0.5) {
+                this.showCam(2);
+            } else {
+                this.showCam(3);
+            }
+        } else {
+            this.showCam(4);
+        }
+    }
+
+    showCam(level) {
+        for (var i=0;i<this.cams.length;i++) {
+            if (i==level) {
+                this.cams[i].setVisible(true);
+                this.camShowing = i;
+            } else {
+                this.cams[i].setVisible(false);
+            }
+        }
+    }
+}
+
+
 
 class CameraScene extends Phaser.Scene {
     create() {
+
+        this.room1Map = this.make.tilemap({key: "cameraTilemap"});
+        const tileset = this.room1Map.addTilesetImage('Cameratiles','cameraTiles');
+        this.room1Static1 = this.room1Map.createStaticLayer('Static1',tileset,c2px(0),c2py(0));
+        this.room1Static2 = this.room1Map.createStaticLayer('Static2',tileset,c2px(0),c2py(0)).setVisible(false);
+        this.room1First1 = this.room1Map.createStaticLayer('Cam1Level1',tileset,c2px(0),c2py(0)).setVisible(false);
+        this.room1First2 = this.room1Map.createStaticLayer('Cam1Level2',tileset,c2px(0),c2py(0)).setVisible(false);
+        this.room1Second = this.room1Map.createStaticLayer('Cam1Level3',tileset,c2px(0),c2py(0)).setVisible(false);
+
+        this.r1cams = [];
+        this.r1cams.push(this.room1Static1);
+        this.r1cams.push(this.room1Static2);
+        this.r1cams.push(this.room1First1);
+        this.r1cams.push(this.room1First2);
+        this.r1cams.push(this.room1Second);
+
+        room1 = new Room(1,c2px(0),c2py(0),this.r1cams,this);
+
         this.tabStrip = new TabStrip(this, 'Cameras');
         var cam1 = this.add.rectangle(c2px(0), c2py(0), 9*32, 5*32);
         cam1.setStrokeStyle(2, 0xffffff);
@@ -28,8 +94,19 @@ class CameraScene extends Phaser.Scene {
 
         //slimeDisplay[0].setPosition(c2px(2),c2py(2));
     }
+
     update(time, delta) {
-        slimeDisplay[0].animate();
+        if(SystemState.repairSystem) {
+            cameraStatus = SystemState.repairSystem.getCameraStatus();
+            room1.updatePower(cameraStatus[0]);
+        } else {
+            room1.updatePower(0);
+        }
+
+        for (var i=0;i<slimeDisplay.length;i++) {
+           slimeDisplay[i].animate();
+        }
+
     }
 
     init() {

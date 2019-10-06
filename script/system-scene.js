@@ -345,6 +345,23 @@ class UserRepair {
         this.blop.updatePower(this.currentSpendable);
     }
 
+    getCameraStatus() {
+        var cameraStatus = [];
+        for (var i=0;i<4;i++) {
+            var camPow = this.allSystems[i].getPower();
+            if (camPow < 1) {
+                cameraStatus.push(0);
+            } else if (camPow < 3) {
+                cameraStatus.push(1);
+            } else if (camPow < 8) {
+                cameraStatus.push(2);
+            } else {
+                cameraStatus.push(3);
+            }
+        }
+        return cameraStatus;
+    }
+
     commitRepairs() {
         this.scene.repairSound.play();
         for (var i=0;i<this.allSystems.length;i++) {
