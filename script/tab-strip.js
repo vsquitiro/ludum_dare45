@@ -9,11 +9,11 @@ const tabList = [
         state: "camera",
         transition: "viewCameras"
     },
-    // {
-    //     name: "Directory",
-    //     state: "directory",
-    //     transition: "viewDirectory"
-    // },
+    {
+        name: "Database",
+        state: "directory",
+        transition: "viewDirectory"
+    },
     {
         name: "System",
         state: "system",

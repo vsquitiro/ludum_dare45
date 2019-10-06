@@ -8,6 +8,7 @@ import FrameScene from './frame-scene.js';
 import SystemScene from './system-scene.js';
 import LoginScene from './login-scene.js';
 import CameraScene from './camera-scene.js';
+import DirectoryScene from './directory-scene.js';
 
 
 //States
@@ -60,6 +61,7 @@ const SystemState = new StateMachine({
             this.currentScreen = camera;
             this.game.scene.add('cameraScene', CameraScene, true);
             this.game.scene.add('systemScene', SystemScene, false);
+            this.game.scene.add('directoryScene', DirectoryScene, false);
             this.game.scene.add('frameScene', FrameScene, true);
             this.timeLoginStart = performance.now() - globalConfig.lightOffTime;
 
@@ -87,6 +89,7 @@ const SystemState = new StateMachine({
             this.currentScreen = camera;
             this.game.scene.add('cameraScene', CameraScene, true);
             this.game.scene.add('systemScene', SystemScene, false);
+            this.game.scene.add('directoryScene', DirectoryScene, false);
 
             this.game.scene.bringToTop('frameScene');
         },
@@ -95,7 +98,8 @@ const SystemState = new StateMachine({
             this.currentScreen = camera;
         },
         onViewDirectory: function() {
-
+            this.game.scene.switch(this.currentScreen + "Scene", 'directoryScene');
+            this.currentScreen = directory;
         },
         onViewSystem: function() {
             this.game.scene.switch(this.currentScreen + "Scene", 'systemScene');
