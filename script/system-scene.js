@@ -6,7 +6,8 @@ import {c2px, c2py} from './inner-screen-positions.js';
 import TabStrip from './tab-strip.js';
 
 class Blop {
-    constructor(xPos,yPos,scene) {
+    constructor(xPos,yPos,scene,UR) {
+        this.UR = UR;
         this.xPos = xPos;
         this.yPos = yPos;
         this.scene = scene;
@@ -22,6 +23,12 @@ class Blop {
 
             this.sprites.push(scene.add.sprite(x,y,'sysTile'));
         }
+        var speechLength = 20-(Math.floor(xPos/32));
+        this.speechBubble = new SpeechBubble(xPos+51,yPos,scene,this,speechLength,UR);
+    }
+
+    updatePower(percent) {
+        this.speechBubble.setRepairMessage(percent);
     }
 
     animate() {
@@ -29,11 +36,13 @@ class Blop {
         this.sprites[1].play('helperTR',true);
         this.sprites[2].play('helperBL',true);
         this.sprites[3].play('helperBR',true);
+        this.speechBubble.animate();
     }
 }
 
 class SpeechBubble {
-    constructor(xPos,yPos,scene,helper,mxLength) {
+    constructor(xPos,yPos,scene,helper,mxLength,UR) {
+        this.UR = UR;
         this.xPos = xPos;
         this.yPos = yPos;
         this.mxLength = mxLength;
@@ -41,17 +50,25 @@ class SpeechBubble {
         this.helper = helper;
         this.topSprites = [];
         this.bottomSprites = [];
-        this.message = null;
+        this.messageT = null;
+        this.messageB = null;
         for (var i=0;i<mxLength;i++) {
             var x = xPos + 32*i;
             var yBot = yPos + 32;
-            this.topSprites.push(scene.add.sprite(x,yPos,'border'));
-            this.bottomSprites.push(scene.add.sprite(x,yBot,'border'));
+            this.topSprites.push(scene.add.sprite(x,yPos,'border').setScale(1));
+            this.bottomSprites.push(scene.add.sprite(x,yBot,'border').setScale(1));
         }
     }
 
     setMessage(message) {
-        this.message;
+        this.messageT = message;
+    }
+
+    setRepairMessage(percent) {
+        this.messageT = "We can restore ";
+        this.messageT += percent;
+        this.messageT += " % more of the system!";
+        this.messageB = "What functions would you like to restore?"
     }
 
     animate() {
@@ -59,34 +76,45 @@ class SpeechBubble {
         for (var i=0;i<(chunks-1);i++) {
             var currentTop = this.topSprites[i];
             var currentBot = this.bottomSprites[i];
-            if (this.message==null) {
-                console.log("speech 3");
+            if (this.messageT==null) {
                 currentTop.play('sTop3',true);
                 currentBot.play('sBot3',true);
             } else if (i==0) {
-                console.log("speech 0");
                 currentTop.play('sTop0',true);
                 currentBot.play('sBot0',true)
             } else {
-                console.log("speech 1");
                 currentTop.play('sTop1',true);
                 currentBot.play('sBot1',true);
             }
         }
-        console.log("speech 2")
-        this.topSprites[this.mxLength-1].play('sTop2',true);
-        this.topSprites[this.mxLength-1].play('sBot2',true);
+        if (this.messageT==null) {
+            this.topSprites[this.mxLength-1].play('sTop3',true);
+            this.bottomSprites[this.mxLength-1].play('sBot3',true);
+        } else {
+            this.topSprites[this.mxLength-1].play('sTop2',true);
+            this.bottomSprites[this.mxLength-1].play('sBot2',true);
+        }
+        if (this.messageB!=null) {
+            var talkingT = this.scene.add.text(this.xPos+16,this.yPos-3,this.messageT);
+            var talkingB = this.scene.add.text(this.xPos+16,this.yPos+18,this.messageB);
+            talkingT.setColor('black');
+            talkingB.setColor('black');
+        } else if (this.messageT!=null) {
+            var talking = this.scene.add.text(this.xPos+16,this.yPos+10,this.messageT);
+            talking.setColor('black');
+        }
     }    
 }
 
 class RepairTracker {
-    constructor(funct,xPos,yPos,powerLevel,barChunk,scene) {
+    constructor(funct,xPos,yPos,powerLevel,barChunk,scene,UR) {
+        this.UR = UR;
         this.funct = funct;
         this.xPos = xPos;
         this.yPos = yPos;
         var xPB = xPos + 64;
         var yPB = yPos + 64;
-        this.PowerBar = new PowerBar((funct + 'Bar'),powerLevel,xPB,yPB,barChunk,scene)
+        this.PowerBar = new PowerBar((funct + 'Bar'),powerLevel,xPB,yPB,barChunk,scene,UR);
         scene.add.text(xPos+16, yPos + 4,funct);
         scene.add.text(xPos-24, (yPos+26),'Current');
         this.scene = scene;
@@ -98,7 +126,8 @@ class RepairTracker {
 }
 
 class PowerButton {
-    constructor(ID,xPos,yPos,raise,scene,powerBar) {
+    constructor(ID,xPos,yPos,raise,scene,powerBar,UR) {
+        this.UR = UR;
         this.ID = ID;
         this.xPos = xPos;
         this.yPos = yPos;
@@ -128,7 +157,8 @@ class PowerButton {
 }
 
 class RepairTotal {
-    constructor(ID,powerLevel,xPos,yPos,scene) {
+    constructor(ID,powerLevel,xPos,yPos,scene,UR) {
+        this.UR = UR;
         this.ID = ID;
         this.powerLevel = powerLevel;
         this.xPos = xPos;
@@ -139,7 +169,7 @@ class RepairTotal {
             var xBar = xPos + 24*i;
             this.chunks.push(scene.add.sprite(xBar,yPos,'border').setScale(0.75));
         }
-        scene.add.text(xPos+170, (yPos+20),'Status of Full System Repair');
+        scene.add.text(xPos+160, (yPos+20),'Status of Full System Repair');
     }
 
     animate() {
@@ -167,7 +197,8 @@ class RepairTotal {
 }
 
 class PowerBar {
-    constructor(ID,powerLevel,xPos,yPos,barChunk,scene) {
+    constructor(ID,powerLevel,xPos,yPos,barChunk,scene,UR) {
+        this.UR = UR;
         this.ID = ID;
         this.powerLevel = powerLevel;
         this.oldLevel = powerLevel;
@@ -176,6 +207,7 @@ class PowerBar {
         this.yPos = yPos;
         this.barChunk = [];
         this.oldChunk = [];
+        this.currentSpent = 0;
         for (var i=0;i<barChunk;i++) {
             var xBar = xPos + 32*i;
             this.barChunk.push(scene.add.sprite(xBar,yPos,'border'));
@@ -185,8 +217,8 @@ class PowerBar {
             var yBar = yPos - 32;
             this.oldChunk.push(scene.add.sprite(xBar,yBar,'border'));
         }
-        this.moreButton = new PowerButton((ID + 'Plus'),xPos-64,yPos,true,scene,this);
-        this.lessButton = new PowerButton((ID + 'Minus'),xPos-32,yPos,false,scene,this);
+        this.moreButton = new PowerButton((ID + 'Plus'),xPos-64,yPos,true,scene,this,UR);
+        this.lessButton = new PowerButton((ID + 'Minus'),xPos-32,yPos,false,scene,this,UR);
         this.scene = scene;
     }
 
@@ -233,27 +265,71 @@ class PowerBar {
     }
 
     incrementPower() {
-        this.updatePower(this.powerLevel+1);
+        if (this.UR.currentSpendable != 0) {
+            this.updatePower(this.powerLevel+1);
+            this.UR.currentSpendable -= 1;
+            this.currentSpent += 1;
+        }   
     }
 
     decrementPower() {
-        this.updatePower(this.powerLevel-1);
+        if (this.currentSpent !=0) {
+            this.updatePower(this.powerLevel-1);
+            this.UR.currentSpendable += 1;
+            this.currentSpent -= 1;
+        }
     }
 }
 
-var camera1;
-var camera2;
-var camera3;
-var camera4;
-var doors;
-var database;
-var repair;
-var panel;
+class UserRepair {
+    constructor(scene) {
+        this.roundCount = 0;
+        this.currentSystemPower = 1;
+        this.currentSpendable = 1;
+        this.currentSpent = 0;
+        this.camera1 = new RepairTracker('Camera 1',c2px(1.5),c2py(0),0,2,scene,this);
+        this.camera2 = new RepairTracker('Camera 2',c2px(6.5),c2py(0),0,2,scene,this);
+        this.camera3 = new RepairTracker('Camera 3',c2px(1.5),c2py(2.5),0,2,scene,this);
+        this.camera4 = new RepairTracker('Camera 4',c2px(6.5),c2py(2.5),0,2,scene,this);
+        this.doors = new RepairTracker('Door Security',c2px(11.5),c2py(0),0,4,scene,this);
+        this.database = new RepairTracker('  Database',c2px(11.5),c2py(2.5),0,4,scene,this);
+        this.repair = new RepairTracker('System Repair',c2px(2.5),c2py(5),0,5,scene,this);
+        this.panel = new RepairTracker('Panel Access',c2px(10.5),c2py(5),0,4,scene,this);
+        this.repairBar = new RepairTotal('Total',this.currentSystemPower,c2px(0),c2py(10),scene,this);
+        this.blop = new Blop(c2px(0.5),c2py(8.0),scene,this);
+        this.scene = scene;
+    }
 
-var blopHelper;
-var speech;
+    animate() {
+        this.camera1.animate();
+        this.camera2.animate();
+        this.camera3.animate();
+        this.camera4.animate();
+        this.doors.animate();
+        this.database.animate();
+        this.repair.animate();
+        this.panel.animate();
+        this.repairBar.animate();
+        this.blop.animate();
+    }
+}
 
-var repairBar;
+
+
+var repairSystem;
+// var camera1;
+// var camera2;
+// var camera3;
+// var camera4;
+// var doors;
+// var database;
+// var repair;
+// var panel;
+
+// var blopHelper;
+// var speech;
+
+// var repairBar;
 
 class SystemScene extends Phaser.Scene {
     init() {
@@ -266,21 +342,20 @@ class SystemScene extends Phaser.Scene {
 
         this.repairSound = this.sound.add('click2');
 
+        repairSystem = new UserRepair(this);
+        // blopHelper = new Blop(c2px(0.5),c2py(8.0),this);
+        // blopHelper.updatePower(3);
 
-        blopHelper = new Blobby(c2px(0.5),c2py(8.0),this);
-        speech = new SpeechBubble(118,478,this,blopHelper,10);
+        // camera1 = new RepairTracker('Camera 1',c2px(1.5),c2py(0),0,2,this);
+        // camera2 = new RepairTracker('Camera 2',c2px(6.5),c2py(0),0,2,this);
+        // camera3 = new RepairTracker('Camera 3',c2px(1.5),c2py(2.5),0,2,this);
+        // camera4 = new RepairTracker('Camera 4',c2px(6.5),c2py(2.5),0,2,this);
+        // doors = new RepairTracker('Door Security',c2px(11.5),c2py(0),0,4,this);
+        // database = new RepairTracker('  Database',c2px(11.5),c2py(2.5),0,4,this);
+        // repair = new RepairTracker('System Repair',c2px(2.5),c2py(5),0,5,this);
+        // panel = new RepairTracker('Panel Access',c2px(10.5),c2py(5),0,4,this);
 
-        //xPos,yPos,scene,helper,mxLength
-        camera1 = new RepairTracker('Camera 1',c2px(1),c2py(0),0,2,this);
-        camera2 = new RepairTracker('Camera 2',c2px(6),c2py(0),0,2,this);
-        camera3 = new RepairTracker('Camera 3',c2px(1),c2py(3),0,2,this);
-        camera4 = new RepairTracker('Camera 4',c2px(6),c2py(3),0,2,this);
-        doors = new RepairTracker('Door Security',c2px(11),c2py(0),0,4,this);
-        database = new RepairTracker('  Database',c2px(11),c2py(3),0,4,this);
-        repair = new RepairTracker('System Repair',c2px(2.5),c2py(6),0,5,this);
-        panel = new RepairTracker('Panel Access',c2px(10),c2py(6),0,4,this);
-
-        repairBar = new RepairTotal('Total',45,c2px(0),c2py(10), this);
+        // repairBar = new RepairTotal('Total',45,c2px(0),c2py(10), this);
 
         var barKeys = ['bar0','bar1','bar2','bar3','bar4'];
         var speechTopKeys = ['sTop0','sTop1','sTop2','sTop3'];
@@ -315,7 +390,7 @@ class SystemScene extends Phaser.Scene {
             repeat: -1
         })
         for (var i=0;i<(speechBotKeys.length-1);i++) {
-            var spriteIdx = 36 + i;
+            var spriteIdx = 45 + i;
 
             this.anims.create({
                 key: speechBotKeys[i],
@@ -377,17 +452,17 @@ class SystemScene extends Phaser.Scene {
     }
 
     update () {
-        camera1.animate();
-        camera2.animate();
-        camera3.animate();
-        camera4.animate();
-        doors.animate();
-        database.animate();
-        repair.animate();
-        panel.animate();
-        repairBar.animate();
-        blopHelper.animate();
-        speech.animate();
+        repairSystem.animate();
+        // camera1.animate();
+        // camera2.animate();
+        // camera3.animate();
+        // camera4.animate();
+        // doors.animate();
+        // database.animate();
+        // repair.animate();
+        // panel.animate();
+        // repairBar.animate();
+        // blopHelper.animate();
     }
 }
 
