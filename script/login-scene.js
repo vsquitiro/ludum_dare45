@@ -50,6 +50,33 @@ class LoginScene extends Phaser.Scene {
         this.passwordDisplay.setOrigin(0, 0.5);
 
         // Login button
+        this.loginButton1 = this.add.sprite(
+            11 * 32 + 16,
+            13 * 32 + 16,
+            'sysTile',
+            128
+        );
+        this.loginButton1.setInteractive().on('pointerdown', function() {
+            this.submit();
+        }, this);
+        this.loginButton2 = this.add.sprite(
+            12 * 32 + 16,
+            13 * 32 + 16,
+            'sysTile',
+            129
+        );
+        this.loginButton2.setInteractive().on('pointerdown', function() {
+            this.submit();
+        }, this);
+        this.loginButton3 = this.add.sprite(
+            13 * 32 + 16,
+            13 * 32 + 16,
+            'sysTile',
+            130
+        );
+        this.loginButton3.setInteractive().on('pointerdown', function() {
+            this.submit();
+        }, this);
 
         // Input handling
         this.input.keyboard.addCapture('SPACE,TAB,BACKSPACE');
@@ -79,15 +106,27 @@ class LoginScene extends Phaser.Scene {
                 this.submit();
             }
         }, this);
-        this.usernameBox.on('pointerdown', function(pointer) {
+        this.usernameBox.setInteractive().on('pointerdown', function(pointer) {
             this.setUsernameFocus();
         }, this);
-        this.passwordBox.on('pointerdown', function(pointer) {
+        this.passwordBox.setInteractive().on('pointerdown', function(pointer) {
             this.setPasswordFocus();
         }, this);
     }
     update(time, delta) {
         
+    }
+
+    updateLoginSprites() {
+        if (this.typedUsername == "" || this.typedPassword == "") {
+            this.loginButton1.setFrame(128);
+            this.loginButton2.setFrame(129);
+            this.loginButton3.setFrame(130);
+        } else {
+            this.loginButton1.setFrame(111);
+            this.loginButton2.setFrame(112);
+            this.loginButton3.setFrame(113);
+        }
     }
 
     toggleEntry() {
@@ -122,6 +161,7 @@ class LoginScene extends Phaser.Scene {
             }
             this.passwordDisplay.setText(crypticPassword);
         }
+        this.updateLoginSprites();
     }
     
     submit() {
