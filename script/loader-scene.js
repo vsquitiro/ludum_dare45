@@ -32,7 +32,7 @@ function preload() {
     this.load.spritesheet('border','assets/bordertileset.png', {frameWidth: 32, frameHeight: 32});
 
     this.load.tilemapTiledJSON('systemTilemap', 'assets/system.json');
-    this.load.spritesheet('system','assets/systemtiles.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('sysTile','assets/systemtiles.png', {frameWidth: 32, frameHeight: 32});
 }
 
 function create() {

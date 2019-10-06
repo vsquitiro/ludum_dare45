@@ -6,7 +6,7 @@ import SystemState from './state-machine.js';
 class FrameScene extends Phaser.Scene {
     create() {
         this.frameMap = this.make.tilemap({key: "systemTilemap"});
-        const tileset = this.frameMap.addTilesetImage('System', 'system');
+        const tileset = this.frameMap.addTilesetImage('System', 'sysTile');
         this.frameLayer = this.frameMap.createStaticLayer('Frame', tileset, 0, -4);
         this.folderLayer = this.frameMap.createStaticLayer('Folder', tileset, 32 * 10, 0);
         

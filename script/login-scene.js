@@ -15,8 +15,9 @@ class LoginScene extends Phaser.Scene {
     create() {
         // Add logo
         this.logoMap = this.make.tilemap({key: "systemTilemap"});
-        const tileset = this.logoMap.addTilesetImage('System', 'system');
+        const tileset = this.logoMap.addTilesetImage('System', 'sysTile');
         this.logoLayer = this.logoMap.createStaticLayer('Logo', tileset, undefined, 0);
+
         // Create input boxes
         this.usernameBox = this.add.rectangle(
             10 * 32,
@@ -47,6 +48,8 @@ class LoginScene extends Phaser.Scene {
             this.typedPassword
         );
         this.passwordDisplay.setOrigin(0, 0.5);
+
+        // Login button
 
         // Input handling
         this.input.keyboard.addCapture('SPACE,TAB,BACKSPACE');
@@ -122,6 +125,9 @@ class LoginScene extends Phaser.Scene {
     }
     
     submit() {
+        if (this.typedUsername == "" || this.typedPassword == "") {
+            return;
+        }
         if (this.typedUsername == globalConfig.correctUsername && this.typedPassword == globalConfig.correctPassword) {
 
         } else {
