@@ -2,6 +2,8 @@
 
 import {screenHeight, screenWidth} from './global-config.js';
 import SystemState from './state-machine.js';
+import {c2px, c2py} from './inner-screen-positions.js';
+import TabStrip from './tab-strip.js';
 
 class Blobby {
     constructor(xPos,yPos,scene) {
@@ -38,7 +40,7 @@ class RepairTracker {
         var xPB = xPos + 64;
         var yPB = yPos + 64;
         this.PowerBar = new PowerBar((funct + 'Bar'),powerLevel,xPB,yPB,barChunk,scene)
-        scene.add.text(xPos+16, yPos,funct);
+        scene.add.text(xPos+16, yPos + 4,funct);
         scene.add.text(xPos-24, (yPos+26),'Current');
         this.scene = scene;
     }
@@ -212,22 +214,22 @@ class SystemScene extends Phaser.Scene {
 
     create() {
         console.log("System Create");
-        this.add.text(0, 0, 'System');
+        this.tabStrip = new TabStrip(this, 'System');
 
         this.repairSound = this.sound.add('click2');
 
-        blobbyHelper = new Blobby(118,440,this);
+        blobbyHelper = new Blobby(c2px(0.5),c2py(8.0),this);
 
-        camera1 = new RepairTracker('Camera 1',136,128,0,2,this);
-        camera2 = new RepairTracker('Camera 2',308,128,0,2,this);
-        camera3 = new RepairTracker('Camera 3',136,228,0,2,this);
-        camera4 = new RepairTracker('Camera 4',308,228,0,2,this);
-        doors = new RepairTracker('Door Security',480,128,0,4,this);
-        database = new RepairTracker('  Database',480,228,0,4,this);
-        repair = new RepairTracker('System Repair',180,327,0,5,this);
-        panel = new RepairTracker('Panel Access',448,327,0,4,this);
+        camera1 = new RepairTracker('Camera 1',c2px(1),c2py(0),0,2,this);
+        camera2 = new RepairTracker('Camera 2',c2px(6),c2py(0),0,2,this);
+        camera3 = new RepairTracker('Camera 3',c2px(1),c2py(3),0,2,this);
+        camera4 = new RepairTracker('Camera 4',c2px(6),c2py(3),0,2,this);
+        doors = new RepairTracker('Door Security',c2px(11),c2py(0),0,4,this);
+        database = new RepairTracker('  Database',c2px(11),c2py(3),0,4,this);
+        repair = new RepairTracker('System Repair',c2px(2.5),c2py(6),0,5,this);
+        panel = new RepairTracker('Panel Access',c2px(10),c2py(6),0,4,this);
 
-        repairBar = new RepairTotal('Total',45,112,500,this);
+        repairBar = new RepairTotal('Total',45,c2px(0),c2py(10), this);
 
          //constructor(ID,powerLevel,xPos,yPos,scene) {;
 

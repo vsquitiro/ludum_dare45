@@ -23,6 +23,7 @@ const SystemState = new StateMachine({
     init: menu,
     transitions: [
         { name: 'gameStart', from: menu, to: blankScreen },
+        { name: 'shortcut', from: menu, to: camera },
         { name: 'debugTest', from: menu, to: debug },
         { name: 'boot', from: blankScreen, to: login },
         { name: 'login', from: login, to: camera },
@@ -53,6 +54,15 @@ const SystemState = new StateMachine({
         onDebugTest: function() {
             this.game.scene.add('debugScene', DebugScene, true);
         },
+        onShortcut: function() {
+            this.currentScreen = camera;
+            this.game.scene.add('cameraScene', CameraScene, true);
+            this.game.scene.add('systemScene', SystemScene, false);
+            this.game.scene.add('frameScene', FrameScene, true);
+            this.timeLoginStart = performance.now();
+
+            this.game.scene.bringToTop('frameScene');
+        },
         onGameStart: function() {
             this.game.scene.add('blankScreenScene', BlankScreenScene, true);
             this.game.scene.add('frameScene', FrameScene, true);
@@ -79,7 +89,8 @@ const SystemState = new StateMachine({
             this.game.scene.bringToTop('frameScene');
         },
         onViewCameras: function() {
-
+            this.game.scene.switch(this.currentScreen + "Scene", 'cameraScene');
+            this.currentScreen = camera;
         },
         onViewDirectory: function() {
 
