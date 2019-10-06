@@ -7,6 +7,7 @@ import FrameScene from './frame-scene.js';
 import SystemScene from './system-scene.js';
 import LoginScene from './login-scene.js';
 import CameraScene from './camera-scene.js';
+import {SlimeData} from './slime-creator.js';
 
 
 //States
@@ -55,6 +56,7 @@ const SystemState = new StateMachine({
             this.game.scene.add('debugScene', DebugScene, true);
         },
         onShortcut: function() {
+            this.allSlimes = createSlimes(10);
             this.currentScreen = camera;
             this.game.scene.add('cameraScene', CameraScene, true);
             this.game.scene.add('systemScene', SystemScene, false);
@@ -104,5 +106,13 @@ const SystemState = new StateMachine({
         },
     }
 });
+
+function createSlimes(count) {
+    var slimeArray = [];
+    for (var i=0;i<count;i++) {
+        slimeArray.push(new SlimeData(i,false));
+    }
+    return slimeArray;
+}
 
 export default SystemState;
