@@ -3,7 +3,7 @@
 import {screenHeight, screenWidth} from './global-config.js';
 import SystemState from './state-machine.js';
 
-class Blobby {
+class Blop {
     constructor(xPos,yPos,scene) {
         this.xPos = xPos;
         this.yPos = yPos;
@@ -28,6 +28,53 @@ class Blobby {
         this.sprites[2].play('helperBL',true);
         this.sprites[3].play('helperBR',true);
     }
+}
+
+class SpeechBubble {
+    constructor(xPos,yPos,scene,helper,mxLength) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.mxLength = mxLength;
+        this.scene = scene;
+        this.helper = helper;
+        this.topSprites = [];
+        this.bottomSprites = [];
+        this.message = null;
+        for (var i=0;i<mxLength;i++) {
+            var x = xPos + 32*i;
+            var yBot = yPos + 32;
+            this.topSprites.push(scene.add.sprite(x,yPos,'border'));
+            this.bottomSprites.push(scene.add.sprite(x,yBot,'border'));
+        }
+    }
+
+    setMessage(message) {
+        this.message;
+    }
+
+    animate() {
+        var chunks = this.mxLength;
+        for (var i=0;i<(chunks-1);i++) {
+            var currentTop = this.topSprites[i];
+            var currentBot = this.bottomSprites[i];
+            if (this.message==null) {
+                console.log("speech 3");
+                currentTop.play('sTop3',true);
+                currentBot.play('sBot3',true);
+            } else if (i==0) {
+                console.log("speech 0");
+                currentTop.play('sTop0',true);
+                currentBot.play('sBot0',true)
+            } else {
+                console.log("speech 1");
+                currentTop.play('sTop1',true);
+                currentBot.play('sBot1',true);
+            }
+        }
+        console.log("speech 2")
+        this.topSprites[this.mxLength-1].play('sTop2',true);
+        this.topSprites[this.mxLength-1].play('sBot2',true);
+    }    
 }
 
 class RepairTracker {
@@ -201,7 +248,8 @@ var database;
 var repair;
 var panel;
 
-var blobbyHelper;
+var blopHelper;
+var speech;
 
 var repairBar;
 
@@ -216,22 +264,25 @@ class SystemScene extends Phaser.Scene {
 
         this.repairSound = this.sound.add('click2');
 
-        blobbyHelper = new Blobby(118,440,this);
+        blopHelper = new Blop(118,408,this);
+        speech = new SpeechBubble(118,478,this,blopHelper,10);
 
-        camera1 = new RepairTracker('Camera 1',136,128,0,2,this);
-        camera2 = new RepairTracker('Camera 2',308,128,0,2,this);
-        camera3 = new RepairTracker('Camera 3',136,228,0,2,this);
-        camera4 = new RepairTracker('Camera 4',308,228,0,2,this);
-        doors = new RepairTracker('Door Security',480,128,0,4,this);
-        database = new RepairTracker('  Database',480,228,0,4,this);
-        repair = new RepairTracker('System Repair',180,327,0,5,this);
-        panel = new RepairTracker('Panel Access',448,327,0,4,this);
+        //xPos,yPos,scene,helper,mxLength
 
-        repairBar = new RepairTotal('Total',45,112,500,this);
+        camera1 = new RepairTracker('Camera 1',152,128,0,2,this);
+        camera2 = new RepairTracker('Camera 2',324,128,0,2,this);
+        camera3 = new RepairTracker('Camera 3',152,228,0,2,this);
+        camera4 = new RepairTracker('Camera 4',324,228,0,2,this);
+        doors = new RepairTracker('Door Security',496,128,0,4,this);
+        database = new RepairTracker('  Database',496,228,0,4,this);
+        repair = new RepairTracker('System Repair',196,327,0,5,this);
+        panel = new RepairTracker('Panel Access',466,327,0,4,this);
 
-         //constructor(ID,powerLevel,xPos,yPos,scene) {;
+        repairBar = new RepairTotal('Total',45,112,468,this);
 
         var barKeys = ['bar0','bar1','bar2','bar3','bar4'];
+        var speechTopKeys = ['sTop0','sTop1','sTop2','sTop3'];
+        var speechBotKeys = ['sBot0','sBot1','sBot2','sBot3'];
 
         for (var i=0;i<barKeys.length;i++) {
             var spriteIdx = 54 + i;
@@ -244,13 +295,49 @@ class SystemScene extends Phaser.Scene {
             })
         }
 
+        //pull the speech bubble from sprite sheet
+        for (var i=0;i<(speechTopKeys.length-1);i++) {
+            var spriteIdx = 27 + i;
+
+            this.anims.create({
+                key: speechTopKeys[i],
+                frames: this.anims.generateFrameNumbers('border',{start:spriteIdx,end:spriteIdx}),
+                frameRate: 5,
+                repeat: -1
+            })
+        }
+        this.anims.create({
+            key: 'sTop3',
+            frames: this.anims.generateFrameNumbers('border',{start:52,end:52}),
+            frameRate: 5,
+            repeat: -1
+        })
+        for (var i=0;i<(speechBotKeys.length-1);i++) {
+            var spriteIdx = 36 + i;
+
+            this.anims.create({
+                key: speechBotKeys[i],
+                frames: this.anims.generateFrameNumbers('border',{start:spriteIdx,end:spriteIdx}),
+                frameRate: 5,
+                repeat: -1
+            })
+        }
+        this.anims.create({
+            key: 'sBot3',
+            frames: this.anims.generateFrameNumbers('border',{start:52,end:52}),
+            frameRate: 5,
+            repeat: -1
+        })
+
+
+
+        //pull the power buttons from the sprite sheet
         this.anims.create({
             key: 'plus',
             frames: this.anims.generateFrameNumbers('sysTile',{start:185,end:185}),
             frameRate: 5,
             repeat: -1
         })
-
         this.anims.create({
             key: 'minus',
             frames: this.anims.generateFrameNumbers('sysTile',{start:186,end:186}),
@@ -258,27 +345,27 @@ class SystemScene extends Phaser.Scene {
             repeat: -1
         })
 
+
+
+        //pull blop from the sprite sheet
         this.anims.create({
             key: 'helperTL',
             frames: this.anims.generateFrameNumbers('sysTile',{start:114,end:114}),
             frameRate: 5,
             repeat: -1
         })
-
         this.anims.create({
             key: 'helperTR',
             frames: this.anims.generateFrameNumbers('sysTile',{start:115,end:115}),
             frameRate: 5,
             repeat: -1
         })
-
         this.anims.create({
             key: 'helperBL',
             frames: this.anims.generateFrameNumbers('sysTile',{start:131,end:131}),
             frameRate: 5,
             repeat: -1
         })
-
         this.anims.create({
             key: 'helperBR',
             frames: this.anims.generateFrameNumbers('sysTile',{start:132,end:132}),
@@ -297,7 +384,8 @@ class SystemScene extends Phaser.Scene {
         repair.animate();
         panel.animate();
         repairBar.animate();
-        blobbyHelper.animate();
+        blopHelper.animate();
+        speech.animate();
     }
 }
 
