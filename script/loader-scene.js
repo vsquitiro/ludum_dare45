@@ -34,6 +34,9 @@ function preload() {
     this.load.tilemapTiledJSON('systemTilemap', 'assets/system.json');
     this.load.spritesheet('sysTile','assets/systemtiles.png', {frameWidth: 32, frameHeight: 32});
 
+    this.load.tilemapTiledJSON('cameraTilemap', 'assets/rooms.json');
+    this.load.spritesheet('cameraTiles','assets/Cameratiles.png', {frameWidth: 32, frameHeight: 32});
+
     //Sounds
     this.load.audio('error1', 'assets/Error1.mp3');
     this.load.audio('error2', 'assets/Error2.mp3');
