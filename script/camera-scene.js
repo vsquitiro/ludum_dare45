@@ -24,6 +24,18 @@ class CameraScene extends Phaser.Scene {
     update(time, delta) {
         
     }
+
+    init() {
+        this.events.on('wake', function() {
+            if (SystemState.repairSystem) {
+                console.log(`Camera 1 Power: ${SystemState.repairSystem.camera1.getPower()} (${SystemState.repairSystem.camera1.getPowerPercentage() * 100}%)`);
+                console.log(`Camera 2 Power: ${SystemState.repairSystem.camera2.getPower()} (${SystemState.repairSystem.camera2.getPowerPercentage() * 100}%)`);
+                console.log(`Camera 3 Power: ${SystemState.repairSystem.camera3.getPower()} (${SystemState.repairSystem.camera3.getPowerPercentage() * 100}%)`);
+                console.log(`Camera 4 Power: ${SystemState.repairSystem.camera4.getPower()} (${SystemState.repairSystem.camera4.getPowerPercentage() * 100}%)`);
+            }
+        }, this);
+        
+    }
 }
 
 export default CameraScene;

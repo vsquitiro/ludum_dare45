@@ -14,9 +14,9 @@ class MenuScene extends Phaser.Scene {
 
         this.input.once('pointerdown', function() {
             console.log("Clicked, starting game");
-            SystemState.gameStart();
+            // SystemState.gameStart();
             //SystemState.debugTest();
-            // SystemState.shortcut();
+            SystemState.shortcut();
         }, this);
     }
 }

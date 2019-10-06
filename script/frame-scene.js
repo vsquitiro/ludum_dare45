@@ -22,8 +22,6 @@ conducted with the police and private inquiries
 from the Head of Security Officer Gonb Debop.
 Gonb Dedop has instated the Senior Systems
 Administrator to restore security systems.
-
-*signed*
 `;
 
 const page2Text = `
@@ -57,6 +55,8 @@ class FrameScene extends Phaser.Scene {
     folderOpen = false;
 
     create() {
+        this.lightClick = this.sound.add('lightClick');
+
         this.frameMap = this.make.tilemap({key: "systemTilemap"});
         const tileset = this.frameMap.addTilesetImage('System', 'sysTile');
         this.frameLayer = this.frameMap.createStaticLayer('Frame', tileset, 0, -4);
@@ -122,6 +122,7 @@ class FrameScene extends Phaser.Scene {
         if (SystemState.timeLoginStart && !SystemState.lightsOn) {
             if (time - SystemState.timeLoginStart > globalConfig.lightOffTime) {
                 SystemState.lightsOn = true;
+                this.lightClick.play();
                 this.frameLayer.setVisible(true);
                 this.folderLayer.setVisible(true);
                 this.openFolderZone.setInteractive({cursor: 'pointer'});
