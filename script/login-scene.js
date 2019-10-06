@@ -11,7 +11,7 @@ class LoginScene extends Phaser.Scene {
     typedUsername = "";
     typedPassword = "";
     currentFocus = "username";
-    maxChars = 8;
+    maxChars = 14;
 
     create() {
         // Audio
@@ -60,7 +60,7 @@ class LoginScene extends Phaser.Scene {
             'sysTile',
             128
         );
-        this.loginButton1.setInteractive().on('pointerdown', function() {
+        this.loginButton1.setInteractive({ cursor: 'pointer' }).on('pointerdown', function() {
             this.submit();
         }, this);
         this.loginButton2 = this.add.sprite(
@@ -69,7 +69,7 @@ class LoginScene extends Phaser.Scene {
             'sysTile',
             129
         );
-        this.loginButton2.setInteractive().on('pointerdown', function() {
+        this.loginButton2.setInteractive({ cursor: 'pointer' }).on('pointerdown', function() {
             this.submit();
         }, this);
         this.loginButton3 = this.add.sprite(
@@ -78,7 +78,7 @@ class LoginScene extends Phaser.Scene {
             'sysTile',
             130
         );
-        this.loginButton3.setInteractive().on('pointerdown', function() {
+        this.loginButton3.setInteractive({ cursor: 'pointer' }).on('pointerdown', function() {
             this.submit();
         }, this);
 
@@ -89,6 +89,8 @@ class LoginScene extends Phaser.Scene {
         const enter = Phaser.Input.Keyboard.KeyCodes.ENTER;
         const acode = Phaser.Input.Keyboard.KeyCodes.A;
         const zcode = Phaser.Input.Keyboard.KeyCodes.Z;
+        const zeroCode = Phaser.Input.Keyboard.KeyCodes.ZERO;
+        const nineCode = Phaser.Input.Keyboard.KeyCodes.NINE;
 
         this.input.keyboard.on('keydown', function (event) {
             if (this.currentFocus == "") {
@@ -96,7 +98,7 @@ class LoginScene extends Phaser.Scene {
             }
             let curEntry = this.currentFocus == "username" ? this.typedUsername : this.typedPassword;
 
-            if (event.keyCode >= acode && event.keyCode <= zcode) {
+            if ((event.keyCode >= acode && event.keyCode <= zcode) || (event.keyCode >= zeroCode && event.keyCode <= nineCode)) {
                 if ((curEntry + event.key).length <= this.maxChars) {
                     curEntry += event.key;
                 }
@@ -110,10 +112,12 @@ class LoginScene extends Phaser.Scene {
                 this.submit();
             }
         }, this);
-        this.usernameBox.setInteractive().on('pointerdown', function(pointer) {
+        this.usernameBox.setInteractive({ cursor: 'pointer' });
+        this.usernameBox.on('pointerdown', function(pointer) {
             this.setUsernameFocus();
         }, this);
-        this.passwordBox.setInteractive().on('pointerdown', function(pointer) {
+        this.passwordBox.setInteractive({ cursor: 'pointer' });
+        this.passwordBox.on('pointerdown', function(pointer) {
             this.setPasswordFocus();
         }, this);
     }

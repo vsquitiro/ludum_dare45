@@ -134,7 +134,7 @@ class PowerButton {
         this.raise = raise;
         this.sprite = scene.add.sprite(xPos,yPos,'sysTile');
         this.powerBar = powerBar;
-        this.sprite.setInteractive().on('pointerdown', () => this.changePower());
+        this.sprite.setInteractive({cursor: 'pointer'}).on('pointerdown', () => this.changePower());
         this.scene = scene;
     }
 
