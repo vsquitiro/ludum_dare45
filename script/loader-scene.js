@@ -28,7 +28,7 @@ function init() {
 function preload() {
     console.log("Loader Preload");
     // Add all assets to be loaded here.
-    this.load.spritesheet('mass','assets/slimeTiles.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('mass','assets/SlimeTiles.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('border','assets/bordertileset.png', {frameWidth: 32, frameHeight: 32});
 
     this.load.tilemapTiledJSON('systemTilemap', 'assets/system.json');

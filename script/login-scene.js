@@ -173,7 +173,7 @@ class LoginScene extends Phaser.Scene {
             return;
         }
         if (this.typedUsername == globalConfig.correctUsername && this.typedPassword == globalConfig.correctPassword) {
-
+            SystemState.login();
         } else {
             this.errorSound.playErrorSound();
             this.updateText("", "username");

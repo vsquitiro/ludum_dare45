@@ -6,13 +6,14 @@ import BlankScreenScene from './blank-screen-scene.js';
 import FrameScene from './frame-scene.js';
 import SystemScene from './system-scene.js';
 import LoginScene from './login-scene.js';
+import CameraScene from './camera-scene.js';
 
 
 //States
 const menu = "menu",
       debug = "debug",
       blankScreen = "blankScreen",
-      login = "login",
+      login = "loginScreen",
       camera = "camera",
       directory = "directory",
       system = "system",
@@ -27,8 +28,8 @@ const SystemState = new StateMachine({
         { name: 'login', from: login, to: camera },
         { name: 'viewCameras', from: [directory, system, comms], to: camera },
         { name: 'viewDirectory', from: [camera, system, comms], to: directory },
-        //{ name: 'viewSystem', from: [directory, camera, comms], to: system },
-        { name: 'viewSystem', from: menu, to: system},
+        { name: 'viewSystem', from: [directory, camera, comms], to: system },
+        // { name: 'viewSystem', from: menu, to: system},
         { name: 'viewComms', from: [directory, system, camera], to: comms },
         //win
         //lose
@@ -67,15 +68,29 @@ const SystemState = new StateMachine({
 
             this.timeLoginStart = performance.now();
         },
-        onLogin: function() { console.log('I vaporized') },
-        onViewCameras: function() { console.log('I condensed') },
-        onViewDirectory: function() { console.log('I condensed') },
-        
-        onViewSystem: function() {
-            this.game.scene.add('systemScene', SystemScene, true);
+        onLeaveLoginScreen: function() {
+            this.game.scene.remove('loginScene');
         },
+        onLogin: function() {
+            this.currentScreen = camera;
+            this.game.scene.add('cameraScene', CameraScene, true);
+            this.game.scene.add('systemScene', SystemScene, false);
 
-        onViewComms: function() { console.log('I condensed') },
+            this.game.scene.bringToTop('frameScene');
+        },
+        onViewCameras: function() {
+
+        },
+        onViewDirectory: function() {
+
+        },
+        onViewSystem: function() {
+            this.game.scene.switch(this.currentScreen + "Scene", 'systemScene');
+            this.currentScreen = system;
+        },
+        onViewComms: function() {
+
+        },
     }
 });
 

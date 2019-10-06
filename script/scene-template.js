@@ -1,6 +1,6 @@
 /** @type {import("../typings/phaser")} */
 
-import {screenHeight, screenWidth} from './global-config.js';
+import globalConfig from './global-config.js';
 import SystemState from './state-machine.js';
 
 class MenuScene extends Phaser.Scene {
