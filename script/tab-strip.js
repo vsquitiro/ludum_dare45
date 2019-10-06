@@ -42,7 +42,7 @@ class TabStrip {
                 tab,
                 tab.name == activeTab,
                 4 + (4 * index),
-                3
+                4
             );
         });
 
