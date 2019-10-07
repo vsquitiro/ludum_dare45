@@ -56,6 +56,7 @@ class FrameScene extends Phaser.Scene {
 
     create() {
         this.lightClick = this.sound.add('lightClick');
+        this.mainMusicLoop = this.sound.add('mainLoop', {loop: true});
 
         this.frameMap = this.make.tilemap({key: "systemTilemap"});
         const tileset = this.frameMap.addTilesetImage('System', 'sysTile');
@@ -123,6 +124,9 @@ class FrameScene extends Phaser.Scene {
             if (time - SystemState.timeLoginStart > globalConfig.lightOffTime) {
                 SystemState.lightsOn = true;
                 this.lightClick.play();
+                this.lightClick.on('complete', function() {
+                    this.mainMusicLoop.play();
+                }, this);
                 this.frameLayer.setVisible(true);
                 this.folderLayer.setVisible(true);
                 this.openFolderZone.setInteractive({cursor: 'pointer'});

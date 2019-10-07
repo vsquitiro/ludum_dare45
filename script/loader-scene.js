@@ -50,6 +50,7 @@ class Loader extends Phaser.Scene {
         this.load.audio('startup', 'assets/StartUp.mp3');
         this.load.audio('click2', 'assets/Click2.mp3');
         this.load.audio('lightClick', 'assets/LightClick.mp3');
+        this.load.audio('mainLoop', 'assets/RegularLoop.mp3');
     }
 
     create() {
