@@ -37,6 +37,13 @@ class Loader extends Phaser.Scene {
         this.load.tilemapTiledJSON('cameraTilemap', 'assets/rooms.json');
         this.load.spritesheet('cameraTiles','assets/Cameratiles.png', {frameWidth: 32, frameHeight: 32});
 
+        this.load.image('distorted1', 'assets/DistortedName1.png');
+        this.load.image('distorted2', 'assets/DistortedName2.png');
+        this.load.image('distorted3', 'assets/DistortedName3.png');
+        this.load.image('distorted4', 'assets/DistortedName4.png');
+        this.load.image('distorted5', 'assets/DistortedName5.png');
+        this.load.image('distorted6', 'assets/DistortedName6.png');
+
         //Sounds
         this.load.audio('error1', 'assets/Error1.mp3');
         this.load.audio('error2', 'assets/Error2.mp3');
@@ -57,13 +64,13 @@ class Loader extends Phaser.Scene {
         });
         this.anims.create({
             key: 'staticSlime2',
-            frames: this.anims.generateFrameNumbers('cameraTiles', {start: 20, end: 21}),
+            frames: this.anims.generateFrameNumbers('cameraTiles', {start: 11, end: 12}),
             frameRate: 5,
             retpeat: -1
         });
         this.anims.create({
             key: 'staticSlime3',
-            frames: this.anims.generateFrameNumbers('cameraTiles', {start: 31, end: 32}),
+            frames: this.anims.generateFrameNumbers('cameraTiles', {start: 27, end: 28}),
             frameRate: 5,
             retpeat: -1
         });

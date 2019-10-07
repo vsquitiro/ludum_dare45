@@ -3,19 +3,19 @@ import {c2px, c2py} from './inner-screen-positions.js';
 const firstNames = ['Baby Oil', 'Bad News', 'Big Burps', "Beenie", "Weenie",
 "Stinkbug", 'Boxelder', 'Butterbean', 'Buttermilk', 'Chad', 'Chesterfield',
 'Chewy', 'Cinnabuns', 'Cleet', 'Cornbread', 'Crab Meat', 'Dark Skies',
-'Dennis Clawhammer', 'Elphonso', 'Fancypants', 'Figgs', 'Foncy', 'Gootsy',
+'Clawhammer', 'Elphonso', 'Fancypants', 'Figgs', 'Foncy', 'Gootsy',
 'Greasy Jim', 'Huckleberry', 'Huggy', 'Ignatious', 'Jimbo', "Pottin", 'Johnny',
 'Lemongrass', 'Lil Debil', 'Longbranch', 'Lunch Money', 'Mergatroid',
-'Mr Peabody', 'Oil-Can', 'Oinks', 'Old Scratch', 'Ovaltine', 'Pennywhistle',
-'Pitchfork Ben', 'Potato Bug', 'Pushmeet', 'Rock Candy', 'Schlomo',
-'Scratchensniff', 'Scut', "Squirt", 'Slaps', 'Snakes', 'Snoobs', 'Snorki',
-'Soupcan Sam', 'Spitzitout', 'Squids', 'Stinky', 'Storyboard', 'Sweet Tea',
+'Mr Peabody', 'Oil-Can', 'Oinks', 'Old Scratch', 'Ovaltine',
+'Boon', 'Potato', 'Pushmeet', 'Rock Candy', 'Schlomo',
+'Scut', "Squirt", 'Slaps', 'Snakes', 'Snoobs', 'Snorki',
+'Soupcan', 'Spitzitout', 'Squids', 'Stinky', 'Storyboard', 'Sweet Tea',
 'TeeTee', 'Wheezy Joe', "Winston", 'Jazz Hands', 'Worms'];
-const lastNames = ['Appleyard', 'Bigmeat', 'Bloominshine', 'Boogerbottom',
-'Breedslovetrout', 'Butterbaugh', 'Clovenhoof', 'Clutterbuck',
+const lastNames = ['Appleyard',
+'Butterbaugh', 'Clovenhoof', 'Clutterbuck',
 'Cocktoasten', 'Endicott', 'Fewhairs', 'Gooberdapple', 'Goodensmith',
 'Goodpasture', 'Guster', 'Henderson', 'Hooperbag', 'Hoosenater',
-'Hootkins', 'Jefferson', 'Jenkins', 'Jingley-Schmidt', 'Johnson',
+'Hootkins', 'Jefferson', 'Jenkins', 'Johnson',
 'Kingfish', 'Listenbee', "M'Bembo", 'McFadden', 'Moonshine', 'Nettles',
 'Noseworthy', 'Olivetti', 'Outerbridge', 'Overpeck', 'Overturf',
 'Oxhandler', 'Pealike', 'Pennywhistle', 'Peterson', 'Pieplow',
@@ -137,6 +137,13 @@ class SlimeVisual {
             this.xRoom = x + 304;
             this.yRoom = y + 160;
         }
+    }
+
+    adjustPosAbsolute(x,y) {
+        this.bod.setPosition(x, y);
+        this.hair.setPosition(x, y);
+        this.eyes.setPosition(x, y);
+        this.mouth.setPosition(x, y);
     }
 
     updatePosition(slimeData) {

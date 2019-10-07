@@ -88,6 +88,7 @@ const SystemState = new StateMachine({
             this.game.scene.remove('loginScene');
         },
         onLogin: function() {
+
             this.allSlimes = createSlimes(12);
             this.currentScreen = camera;
             this.game.scene.add('cameraScene', CameraScene, true);
