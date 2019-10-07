@@ -1,5 +1,31 @@
 import {c2px, c2py} from './inner-screen-positions.js';
 
+const firstNames = ['Baby Oil', 'Bad News', 'Big Burps', "Beenie", "Weenie",
+"Stinkbug", 'Boxelder', 'Butterbean', 'Buttermilk', 'Chad', 'Chesterfield',
+'Chewy', 'Cinnabuns', 'Cleet', 'Cornbread', 'Crab Meat', 'Dark Skies',
+'Dennis Clawhammer', 'Elphonso', 'Fancypants', 'Figgs', 'Foncy', 'Gootsy',
+'Greasy Jim', 'Huckleberry', 'Huggy', 'Ignatious', 'Jimbo', "Pottin", 'Johnny',
+'Lemongrass', 'Lil Debil', 'Longbranch', 'Lunch Money', 'Mergatroid',
+'Mr Peabody', 'Oil-Can', 'Oinks', 'Old Scratch', 'Ovaltine', 'Pennywhistle',
+'Pitchfork Ben', 'Potato Bug', 'Pushmeet', 'Rock Candy', 'Schlomo',
+'Scratchensniff', 'Scut', "Squirt", 'Slaps', 'Snakes', 'Snoobs', 'Snorki',
+'Soupcan Sam', 'Spitzitout', 'Squids', 'Stinky', 'Storyboard', 'Sweet Tea',
+'TeeTee', 'Wheezy Joe', "Winston", 'Jazz Hands', 'Worms'];
+const lastNames = ['Appleyard', 'Bigmeat', 'Bloominshine', 'Boogerbottom',
+'Breedslovetrout', 'Butterbaugh', 'Clovenhoof', 'Clutterbuck',
+'Cocktoasten', 'Endicott', 'Fewhairs', 'Gooberdapple', 'Goodensmith',
+'Goodpasture', 'Guster', 'Henderson', 'Hooperbag', 'Hoosenater',
+'Hootkins', 'Jefferson', 'Jenkins', 'Jingley-Schmidt', 'Johnson',
+'Kingfish', 'Listenbee', "M'Bembo", 'McFadden', 'Moonshine', 'Nettles',
+'Noseworthy', 'Olivetti', 'Outerbridge', 'Overpeck', 'Overturf',
+'Oxhandler', 'Pealike', 'Pennywhistle', 'Peterson', 'Pieplow',
+'Pinkerton', 'Porkins', 'Putney', 'Quakenbush', 'Rainwater',
+'Rosenthal', 'Rubbins', 'Sackrider', 'Snuggleshine', 'Splern',
+'Stevens', 'Stroganoff', 'Sugar-Gold', 'Swackhamer', 'Tippins',
+'Turnipseed', 'Vinaigrette', 'Walkingstick', 'Wallbanger', 'Weewax',
+'Weiners', 'Whipkey', 'Wigglesworth', 'Wimplesnatch', 'Winterkorn',
+'Woolysocks'];
+
 class SlimeData {
     constructor(ID,traitor) {
         var colors = [0xffffff,0xc0c0c0,0x808080,0x000000,0xff0000,0x800000,0xffff00,0x808000,0x00ff00,0x008000,0x00ffff,0x008080,0x0000ff,0x000080,0xff00ff,0x800080];
@@ -20,6 +46,8 @@ class SlimeData {
         this.hairKey = rnd.pick(hairKeys);
         this.tint = rnd.pick(colors);
         this.tintHair = rnd.pick(colors);
+        this.firstName = rnd.pick(firstNames);
+        this.lastName = rnd.pick(lastNames);
         this.traitor = traitor;
     }
 
@@ -199,110 +227,32 @@ class SlimeVisual {
 }
 
 class StaticSlime {
-    constructor(scene, xPos, yPos) {
+    /**
+     * 
+     * @param {Phaser.Scene} scene 
+     * @param {number} x 
+     * @param {number} y 
+     */
+    constructor(scene, x, y) {
         this.scene = scene;
-        this.randSlime = Math.floor(Math.random() * 3);
-        
-
-        //create eye animations
-        this.scene.anims.create({
-            key: this.eyeKey,
-            frames: this.scene.anims.generateFrameNumbers('mass', {start: this.eyeIdx, end: this.eyeIdx+1}),
-            frameRate: 5,
-            repeat: -1
-        })
-
-        //create mouth animations
-        this.scene.anims.create({
-            key: this.mouthKey,
-            frames: this.scene.anims.generateFrameNumbers('mass', {start: this.mouthIdx, end: this.mouthIdx+1}),
-            frameRate: 5,
-            repeat: -1
-        })
-
-        //create hair animations
-        this.scene.anims.create({
-            key: this.hairKey,
-            frames: this.scene.anims.generateFrameNumbers('mass', {start: this.hairIdx, end: this.hairIdx+1}),
-            frameRate: 5,
-            repeat: -1
-        })
+        this.randSlime = Math.floor(Math.random() * 3) + 1;
 
         //create body animation
-        this.scene.anims.create({
-            key: this.bounceKey,
-            frames: this.scene.anims.generateFrameNumbers('mass', {start: 0, end: 1}),
-            frameRate: 5,
-            repeat: -1
-        })
+        this.bod = this.scene.add.sprite(x, y);
+        this.bod.setOrigin(0, 0);
     }
 
-    // setPosition(x,y) {
-    //     var room = this.slimeData.roomID;
-    //     if (room == 0) {
-    //         this.xPos = x;
-    //         this.yPos = y;
-    //     } else if(room == 1) {
-    //         this.xPos = x+288;
-    //         this.yPos = y;
-    //     } else if (room ==2) {
-    //         this.xPos = x;
-    //         this.yPos = y+160;
-    //     } else if (room ==3) {
-    //         this.xPos = x+288;
-    //         this.yPos = y+160
-    //     }
-    // }
-
-    setBody(scene) {
-        this.bod = this.scene.add.sprite(this.xPos,this.yPos);
+    setVisible(visible) {
+        this.bod.setVisible(visible);
     }
 
-    setEyes(scene) {
-        this.eyes = this.scene.add.sprite(this.xPos,this.yPos);
-    }
-
-    setMouth(scene) {
-        this.mouth = this.scene.add.sprite(this.xPos,this.yPos);
-    }
-
-    setHair(scene) {
-        this.hair = this.scene.add.sprite(this.xPos,this.yPos);
-    }
-
-    setColor() {
-        this.bod.setTint(this.tint);
-    }
-
-    setColorEyes() {
-        this.eyes.setTint(this.tint);
-    }
-
-    setColorHair() {
-        this.hair.setTint(this.tintHair);
-    }
-
-    setSprite(scene,key) {
-        this.setBody(scene,key);
-        this.setEyes(scene,key);
-        this.setMouth(scene,key);
-        this.setHair(scene,key);
-    }
-
-    setSpriteAndColor(scene,key) {
-        this.setSprite(scene,key);
-        this.setColor();
-        this.setColorEyes();
-        this.setColorHair();
+    destroy() {
+        this.bod.destroy();
     }
 
     animate() {
-        this.bod.play(this.bounceKey,true);
-        this.eyes.play(this.eyeKey,true);
-        this.mouth.play(this.mouthKey,true);
-        this.hair.play(this.hairKey,true);
+        this.bod.play('staticSlime' + this.randSlime, true);
     }
-
 }
 
 export {
