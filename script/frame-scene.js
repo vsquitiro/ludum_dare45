@@ -10,10 +10,10 @@ Generator back up restored basic functions a
 few seconds afterwards. Security Personal
 conducted investigation of the premises. The
 Server room showed signs of sabotage both to
-the hardware and systems. Lose of the security
+the hardware and systems. Loss of the security
 system shows unable to restore data concerning
-which personal had accessed the Server room. No
-monetary loses have occurred as the generator
+which personnel had accessed the Server room. No
+monetary losses have occurred as the generator
 restored the secondary Emergency Vault lock
 before it was accessed. 
     A report has been filed with the Florpon
