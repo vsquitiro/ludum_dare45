@@ -32,11 +32,15 @@ class SlimeData {
         var eyeKeys = [0,1,2,3,4,5,6];
         var mouthKeys = [0,1,2,3,4,5,6];
         var hairKeys = [0,1,2,3,4,5];
-        var roomID = [0,1,2,3];
+        this.roomKeys = [0,1,2,3];
+        this.xRand = [0,1,2,3,4,5,6,7,8]
+        this.yRand = [1,2,3,4];
 
         var rnd = Phaser.Math.RND;
+        this.xPos = c2px(rnd.pick(this.xRand));
+        this.yPos = c2py(rnd.pick(this.yRand));
         this.ID = ID;
-        this.roomID = rnd.pick(roomID);
+        this.roomID = rnd.pick(this.roomKeys);
         this.eyeKey = rnd.pick(eyeKeys);
         this.mouthKey = rnd.pick(mouthKeys);
         this.hairKey = rnd.pick(hairKeys);
@@ -50,24 +54,22 @@ class SlimeData {
     setRoomID(room) {
         this.roomID = room;
     }
+
+    move() {
+        var rnd = Phaser.Math.RND;
+        this.setRoomID(rnd.pick(this.roomKeys));
+        this.xPos = c2px(rnd.pick(this.xRand));
+        this.yPos = c2py(rnd.pick(this.yRand));
+    }
 }
 
 class SlimeVisual {
     constructor(slimeData,scene) {
-        var xRand = [0,1,2,3,4,5,6,7,8]
-        var yRand = [1,2,3,4];
-        var rnd = Phaser.Math.RND;
         this.slimeData = slimeData;
         this.scene = scene;
-
-        this.xPos = c2px(rnd.pick(xRand));
-        this.yPos = c2py(rnd.pick(yRand));
         this.xRoom;
         this.yRoom;
-        this.adjustPos(this.xPos,this.yPos);
-        // this.xPos = c2px(-10);
-        // this.yPos = c2py(-10);
-        
+        this.adjustPos(slimeData.xPos,slimeData.yPos);        
 
         this.eyeIdx = 2 + 6*(slimeData.eyeKey);
         this.eyeKey = 'eye' + this.slimeData.ID;
@@ -81,11 +83,6 @@ class SlimeVisual {
         this.tintHair = slimeData.tintHair;
 
         this.setSpriteAndColor(scene,'mass')
-
-        // this.bod = scene.add.sprite(this.xPos,this.yPox,'mass');
-        // this.eyes = scene.add.sprite(this.xPos,this.yPox,'mass');
-        // this.mouth = scene.add.sprite(this.xPos,this.yPox,'mass');
-        // this.hair = scene.add.sprite(this.xPos,this.yPox,'mass');
 
         //create eye animations
         this.scene.anims.create({
@@ -120,58 +117,70 @@ class SlimeVisual {
         })
     }
 
-    // setPosition(x,y) {
-    //     var room = this.slimeData.roomID;
-    //     if (room == 0) {
-    //         this.xPos = x;
-    //         this.yPos = y;
-    //     } else if(room == 1) {
-    //         this.xPos = x+288;
-    //         this.yPos = y;
-    //     } else if (room ==2) {
-    //         this.xPos = x;
-    //         this.yPos = y+160;
-    //     } else if (room ==3) {
-    //         this.xPos = x+288;
-    //         this.yPos = y+160
-    //     }
-    // }
+    refreshData(slimeData) {
+        console.log(this.slimeData.xPos);
+        this.slimeData = slimeData;
+        console.log(this.slimeData.xPos);
+    }
 
     adjustPos(x,y) {
         var room = this.slimeData.roomID;
-        console.log('slime view: ' + room);
         if(room == 0) {
-            this.xRoom = x;
+            this.xRoom = x + 16;
             this.yRoom = y;
         } else if (room == 1) {
-            this.xRoom = x + 288;
+            this.xRoom = x + 304;
             this.yRoom = y;
         } else if (room == 2) {
-            this.xRoom = x;
+            this.xRoom = x + 16;
             this.yRoom = y + 160;
         } else if (room == 3) {
-            this.xRoom = x + 288;
+            this.xRoom = x + 304;
             this.yRoom = y + 160;
         }
-        console.log(this.ID);
-        console.log(this.xRoom);
-        console.log(this.yRoom);
+    }
+
+    updatePosition(slimeData) {
+        this.refreshData(slimeData);
+        this.adjustPos(this.slimeData.xPos,this.slimeData.yPos);
+        this.refreshSprites();
+
     }
 
     setBody(scene) {
         this.bod = this.scene.add.sprite(this.xRoom,this.yRoom);
     }
 
+    refreshBody() {
+        this.bod.x = this.xRoom;
+        this.bod.y = this.yRoom;
+    }
+
     setEyes(scene) {
         this.eyes = this.scene.add.sprite(this.xRoom,this.yRoom);
+    }
+
+    refreshEyes() {
+        this.eyes.x = this.xRoom;
+        this.eyes.y = this.yRoom;
     }
 
     setMouth(scene) {
         this.mouth = this.scene.add.sprite(this.xRoom,this.yRoom);
     }
 
+    refreshMouth() {
+        this.mouth.x = this.xRoom;
+        this.mouth.y = this.yRoom;
+    }
+
     setHair(scene) {
         this.hair = this.scene.add.sprite(this.xRoom,this.yRoom);
+    }
+
+    refreshHair() {
+        this.hair.x = this.xRoom;
+        this.hair.y = this.yRoom;
     }
 
     setColor() {
@@ -198,6 +207,14 @@ class SlimeVisual {
         this.setColor();
         this.setColorEyes();
         this.setColorHair();
+    }
+
+    refreshSprites() {
+        console.log('slime: ' + this.ID + 'refreshed!');
+        this.refreshBody();
+        this.refreshEyes();
+        this.refreshMouth();
+        this.refreshHair();
     }
 
     animate() {

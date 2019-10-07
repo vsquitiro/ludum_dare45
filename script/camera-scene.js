@@ -99,12 +99,17 @@ class CameraScene extends Phaser.Scene {
         if(SystemState.repairSystem) {
             cameraStatus = SystemState.repairSystem.getCameraStatus();
             room1.updatePower(cameraStatus[0]);
+
+            for (var i=0;i<slimeDisplay.length;i++) {
+                if (SystemState.repairSystem.toMove) {
+                    slimeDisplay[i].updatePosition(SystemState.allSlimes[i]);
+                }
+                slimeDisplay[i].animate();
+                
+            }
+            SystemState.repairSystem.toMove = false;
         } else {
             room1.updatePower(0);
-        }
-
-        for (var i=0;i<slimeDisplay.length;i++) {
-           slimeDisplay[i].animate();
         }
 
     }
