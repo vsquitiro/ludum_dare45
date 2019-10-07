@@ -68,10 +68,13 @@ class SlimeEntry {
         this.scene = scene;
         this.isClear = false;
         this.slimeData = slimeData;
+        this.randomNum = Math.ceil(Math.random() * 6);
 
         this.frame = this.scene.add.image(x + (0.5 * 32), y + (0.5 * 32), 'entryRoundedRect');
         this.frame.setOrigin(0, 0);
         this.slimeSprite = new StaticSlime(scene, x + (1 * 32), y + (1 * 32));
+        this.name = this.scene.add.image(x + 2.3 * 32, y + (0.5 * 32), 'distorted' + this.randomNum);
+        this.name.setOrigin(0, 0);
     }
 
     makeClear() {
