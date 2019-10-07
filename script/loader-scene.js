@@ -64,13 +64,13 @@ class Loader extends Phaser.Scene {
         });
         this.anims.create({
             key: 'staticSlime2',
-            frames: this.anims.generateFrameNumbers('cameraTiles', {start: 20, end: 21}),
+            frames: this.anims.generateFrameNumbers('cameraTiles', {start: 11, end: 12}),
             frameRate: 5,
             retpeat: -1
         });
         this.anims.create({
             key: 'staticSlime3',
-            frames: this.anims.generateFrameNumbers('cameraTiles', {start: 31, end: 32}),
+            frames: this.anims.generateFrameNumbers('cameraTiles', {start: 27, end: 28}),
             frameRate: 5,
             retpeat: -1
         });

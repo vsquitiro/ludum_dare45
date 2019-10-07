@@ -30,7 +30,7 @@ class DirectoryScene extends Phaser.Scene {
         rect.fillRoundedRect(0, 0, 5 * 32, 2 * 32, 5);
         rect.generateTexture('entryRoundedRect', 5*32, 2 * 32);
 
-        this.moveToLevel0();
+        this.moveToLevel1();
     }
     update(time, delta) {
         this.slimeEntries.forEach((entry) => entry.animate());
