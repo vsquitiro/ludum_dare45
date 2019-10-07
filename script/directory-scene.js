@@ -58,11 +58,13 @@ class DirectoryScene extends Phaser.Scene {
     }
 
     moveToLevel2() {
+        this.slimeEntries.forEach((slime) => slime.clearName());   
         this.slimeEntries.forEach((slime) => slime.clearImage());
     }
 
     moveToLevel3() {
-
+        this.slimeEntries.forEach((slime) => slime.clearName());   
+        this.slimeEntries.forEach((slime) => slime.clearImage());
     }
 }
 

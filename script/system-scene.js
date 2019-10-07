@@ -370,9 +370,17 @@ class UserRepair {
         }
         this.checkRepairRate();
         this.currentSpent =0;
-        this.currentSystemPower += this.repairRate;
-        this.repairBar.powerLevel = this.currentSystemPower;
-        this.currentSpendable = this.repairRate;
+
+        if(this.repairRate + this.currentSystemPower < 100) {
+            this.currentSystemPower += this.repairRate;
+            this.repairBar.powerLevel = this.currentSystemPower;
+            this.currentSpendable = this.repairRate;
+        } else {
+            this.repairRate = 100 - this.currentSystemPower;
+            this.currentSystemPower += this.repairRate;
+            this.repairBar.powerLevel = this.currentSystemPower;
+            this.currentSpendable = this.repairRate;
+        }
         for (var i=0;i<SystemState.allSlimes.length;i++) {
             SystemState.allSlimes[i].move();
         }
