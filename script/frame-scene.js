@@ -19,8 +19,8 @@ before it was accessed.
     A report has been filed with the Florpon
 Police Department, interviews are being
 conducted with the police and private inquiries
-from the Head of Security Officer Gonb Debop.
-Gonb Dedop has instated the Senior Systems
+from the Head of Security Officer Gnob Debop.
+Gnob Debop has instated the Senior Systems
 Administrator to restore security systems.
 `;
 
