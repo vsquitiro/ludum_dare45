@@ -339,6 +339,7 @@ class UserRepair {
         this.repairBar = new RepairTotal('Total',this.currentSystemPower,c2px(0),c2py(10),scene,this);
         this.blop = new Blop(c2px(0.5),c2py(8.0),scene,this);
         this.scene = scene;
+        this.toMove = false;
     }
 
     checkPower() {
@@ -372,6 +373,10 @@ class UserRepair {
         this.currentSystemPower += this.repairRate;
         this.repairBar.powerLevel = this.currentSystemPower;
         this.currentSpendable = this.repairRate;
+        for (var i=0;i<SystemState.allSlimes.length;i++) {
+            SystemState.allSlimes[i].move();
+        }
+        this.toMove = true;
     }
 
     checkRepairRate() {

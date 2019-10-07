@@ -60,9 +60,6 @@ const SystemState = new StateMachine({
         },
         onShortcut: function() {
             this.allSlimes = createSlimes(10);
-            for (var i=0;i<this.allSlimes.length;i++) {
-                console.log(this.allSlimes[i].roomID);
-            }
             this.currentScreen = camera;
             this.game.scene.add('cameraScene', CameraScene, true);
             this.game.scene.add('systemScene', SystemScene, false);
