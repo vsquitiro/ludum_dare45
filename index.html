@@ -27,15 +27,17 @@
         }
         #explainer {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             font-size: .8em;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             color: white;
-            height: 1em;
             padding: 0.5em;
+        }
+        #explainer span, #explainer a, #explainer img {
+            vertical-align: middle;
         }
         #creators {
             display: flex;
@@ -86,6 +88,7 @@
     </div>
     <div id="explainer">
         <span>This project was created for Ludum Dare 45 with the theme "Start with nothing"</span>
+        <span>Find the code at GitHub <a href="https://github.com/vsquitiro/ludum_dare45"><img src="assets/GitHub-Mark-Light-32px.png"/></a></span>
     </div>
     <div id="creators">
         <div class="creator">
