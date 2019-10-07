@@ -11,10 +11,19 @@ class DirectoryScene extends Phaser.Scene {
         this.events.on('wake', function() {
             if (SystemState.repairSystem) {
                 let dbStatus = SystemState.repairSystem.database.getPower();
-                
+                if (dbStatus >= 16) {
+                    dbStatus = 3;
+                } else if (dbStatus >= 6) {
+                    dbStatus = 2;
+                } else if (dbStatus >= 2) {
+                    dbStatus = 1;
+                } else {
+                    dbStatus = 0;
+                }
                 
                 if (dbStatus > this.dbStatus) {
                     this.dbStatus = dbStatus;
+                    this['moveToLevel' + dbStatus]();
                 }
             }
         }, this);
@@ -30,17 +39,13 @@ class DirectoryScene extends Phaser.Scene {
         rect.fillRoundedRect(0, 0, 5 * 32, 2 * 32, 5);
         rect.generateTexture('entryRoundedRect', 5*32, 2 * 32);
 
-        this.moveToLevel1();
+        this.moveToLevel0();
     }
     update(time, delta) {
         this.slimeEntries.forEach((entry) => entry.animate());
     }
 
     moveToLevel0() {
-        
-    }
-
-    moveToLevel1() {
         this.slimeEntries = SystemState.allSlimes.map((slimeData, i) => {
             let row = Math.floor(i / 3);
             let col = i % 3;
@@ -48,8 +53,12 @@ class DirectoryScene extends Phaser.Scene {
         });
     }
 
+    moveToLevel1() {
+        this.slimeEntries.forEach((slime) => slime.clearName());
+    }
+
     moveToLevel2() {
-        this.slimeEntries.forEach((slime) => slime.makeClear());
+        this.slimeEntries.forEach((slime) => slime.clearImage());
     }
 
     moveToLevel3() {
@@ -85,14 +94,17 @@ class SlimeEntry {
         // }, this);
     }
 
-    makeClear() {
-        this.slimeSprite.destroy();
-        this.slimeSprite = new SlimeVisual(this.slimeData, this.scene);
-        this.slimeSprite.adjustPosAbsolute(this.x + (1.5 * 32), this.y + (1.5 * 32));
+    clearName() {
         this.name.destroy();
         this.name = this.scene.add.text(this.x + 2.3 * 32, this.y + 1 * 32, this.slimeData.firstName + '\n' + this.slimeData.lastName);
         this.name.setFontSize(12);
         this.name.setOrigin(0, 0);
+    }
+
+    clearImage() {
+        this.slimeSprite.destroy();
+        this.slimeSprite = new SlimeVisual(this.slimeData, this.scene);
+        this.slimeSprite.adjustPosAbsolute(this.x + (1.5 * 32), this.y + (1.5 * 32));
     }
 
     setVisible(visible) {
