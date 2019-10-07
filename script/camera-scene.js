@@ -4,9 +4,10 @@ import globalConfig from './global-config.js';
 import SystemState from './state-machine.js';
 import {c2px, c2py} from './inner-screen-positions.js';
 import TabStrip from './tab-strip.js';
-import {SlimeData, SlimeVisual} from './slime-creator.js';
+import {SlimeData, SlimeVisual, StaticSlimeVisual} from './slime-creator.js';
 
 var slimeDisplay;
+var staticSlimeDisplay;
 var cameraStatus;
 var room1;
 
@@ -91,8 +92,7 @@ class CameraScene extends Phaser.Scene {
         cam4.setOrigin(0, 0);
 
         slimeDisplay = visualSlimeArray(SystemState.allSlimes,this);
-
-        //slimeDisplay[0].setPosition(c2px(2),c2py(2));
+        staticSlimeDisplay = visualStaticSlimeArray(SystemState.allSlimes,this);
     }
 
     update(time, delta) {
@@ -103,8 +103,12 @@ class CameraScene extends Phaser.Scene {
             for (var i=0;i<slimeDisplay.length;i++) {
                 if (SystemState.repairSystem.toMove) {
                     slimeDisplay[i].updatePosition(SystemState.allSlimes[i]);
+                    staticSlimeDisplay[i].updatePosition(SystemState.allSlimes[i]);
+                    slimeDisplay[i].slimeCamera(cameraStatus);
+                    staticSlimeDisplay[i].slimeCamera(cameraStatus);
                 }
                 slimeDisplay[i].animate();
+                staticSlimeDisplay[i].animate();
                 
             }
             SystemState.repairSystem.toMove = false;
@@ -131,6 +135,14 @@ function visualSlimeArray(slimeData,scene) {
     var visArray = []
     for (var i=0;i<slimeData.length;i++) {
         visArray.push(new SlimeVisual(slimeData[i],scene));
+    }
+    return visArray;
+}
+
+function visualStaticSlimeArray(slimeData,scene) {
+    var visArray = []
+    for (var i=0;i<slimeData.length;i++) {
+        visArray.push(new StaticSlimeVisual(slimeData[i],scene));
     }
     return visArray;
 }
