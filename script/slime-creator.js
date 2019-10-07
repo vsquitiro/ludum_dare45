@@ -83,6 +83,7 @@ class SlimeVisual {
         this.tintHair = slimeData.tintHair;
 
         this.setSpriteAndColor(scene,'mass')
+        this.hideSlime();
 
         //create eye animations
         this.scene.anims.create({
@@ -118,9 +119,7 @@ class SlimeVisual {
     }
 
     refreshData(slimeData) {
-        console.log(this.slimeData.xPos);
         this.slimeData = slimeData;
-        console.log(this.slimeData.xPos);
     }
 
     adjustPos(x,y) {
@@ -217,7 +216,6 @@ class SlimeVisual {
     }
 
     refreshSprites() {
-        console.log('slime: ' + this.ID + 'refreshed!');
         this.refreshBody();
         this.refreshEyes();
         this.refreshMouth();
@@ -231,6 +229,111 @@ class SlimeVisual {
         this.hair.play(this.hairKey,true);
     }
 
+    hideSlime() {
+        this.bod.setVisible(false);
+        this.eyes.setVisible(false);
+        this.mouth.setVisible(false);
+        this.hair.setVisible(false);
+    }
+
+    showSlime() {
+        this.bod.setVisible(true);
+        this.eyes.setVisible(true);
+        this.mouth.setVisible(true);
+        this.hair.setVisible(true);
+    }
+
+    slimeCamera(cameraArray) {
+        var cameraIdx = this.slimeData.roomID;
+        var camera = cameraArray[cameraIdx];
+        if (camera < 2) {
+            this.hideSlime();
+        } else {
+            this.showSlime();
+        }
+    }
+}
+
+class StaticSlimeVisual {
+    /**
+     * 
+     * @param {Phaser.Scene} scene 
+     * @param {number} x 
+     * @param {number} y 
+     */
+    constructor(slimeData,scene) {
+        this.slimeData = slimeData;
+        this.scene = scene;
+        this.xRoom;
+        this.yRoom;
+        this.adjustPos(slimeData.xPos,slimeData.yPos);
+
+        this.randSlime = Math.floor(Math.random() * 3) + 1;
+
+        //create body animation
+        this.bod = this.scene.add.sprite(this.xRoom, this.yRoom);
+        this.hideSlime();
+    }
+
+    refreshData(slimeData) {
+        this.slimeData = slimeData;
+    }
+
+    adjustPos(x,y) {
+        var room = this.slimeData.roomID;
+        if(room == 0) {
+            this.xRoom = x + 16;
+            this.yRoom = y;
+        } else if (room == 1) {
+            this.xRoom = x + 304;
+            this.yRoom = y;
+        } else if (room == 2) {
+            this.xRoom = x + 16;
+            this.yRoom = y + 160;
+        } else if (room == 3) {
+            this.xRoom = x + 304;
+            this.yRoom = y + 160;
+        }
+    }
+
+    updatePosition(slimeData) {
+        this.refreshData(slimeData);
+        this.adjustPos(this.slimeData.xPos,this.slimeData.yPos);
+        this.refreshSprites();
+    }
+
+    refreshSprites() {
+        this.bod.x = this.xRoom;
+        this.bod.y = this.yRoom;
+    }
+
+    showSlime() {
+        this.bod.setVisible(true);
+    }
+
+    hideSlime() {
+        this.bod.setVisible(false);
+    }
+
+    slimeCamera(cameraArray) {
+        console.log("array: " + cameraArray);
+        console.log("room: " + this.slimeData.roomID);
+        var cameraIdx = this.slimeData.roomID;
+        var camera = cameraArray[cameraIdx];
+        console.log("camera: " + camera)
+        if (camera == 1) {
+            this.showSlime();
+        } else {
+            this.hideSlime();
+        }
+        console.log(this.bod.visible);
+        console.log('bod x: ' + this.bod.x);
+        console.log('bod y: ' + this.bod.y);
+    }
+
+    animate() {
+        this.bod.play('staticSlime' + this.randSlime, true);
+    }
 }
 
 class StaticSlime {
@@ -265,6 +368,7 @@ class StaticSlime {
 export {
     SlimeData,
     SlimeVisual,
+    StaticSlimeVisual,
     StaticSlime,
 }
 
