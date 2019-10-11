@@ -50,10 +50,11 @@ class TabStrip {
     }
 }
 
+const activeFrame = 0;
+const inactiveFrame = 18;
+const clickedFrame = 9;
+
 class Tab {
-    static activeFrame = 0;
-    static inactiveFrame = 18;
-    static clickedFrame = 9;
     /**
      * 
      * @param {Phaser.Scene} scene 
@@ -77,7 +78,7 @@ class Tab {
                 (xCell + i) * 32,
                 yCell * 32,
                 'border',
-                (this.active ? Tab.activeFrame : Tab.inactiveFrame) + (i > 1 ? i - 1 : i)
+                (this.active ? activeFrame : inactiveFrame) + (i > 1 ? i - 1 : i)
             );
             sprite.setOrigin(0, 0);
             if (!this.active) {
