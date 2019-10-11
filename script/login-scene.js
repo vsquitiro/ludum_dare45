@@ -16,6 +16,17 @@ class LoginScene extends Phaser.Scene {
     }
 
     create() {
+        this.realInput = document.createElement('input');
+        this.realInput.setAttribute('type', 'text');
+        this.realInput.className = "realInput";
+        this.realInput.setAttribute('autocapitalize', "off");
+
+        document.body.appendChild(this.realInput);
+
+        this.realInput.addEventListener('keydown', (e) => {
+            this.realInput.value = "";
+        });
+
         // Audio
         this.errorSound = new ErrorSound(this);
 
@@ -102,7 +113,7 @@ class LoginScene extends Phaser.Scene {
 
             if ((event.keyCode >= acode && event.keyCode <= zcode) || (event.keyCode >= zeroCode && event.keyCode <= nineCode)) {
                 if ((curEntry + event.key).length <= this.maxChars) {
-                    curEntry += event.key;
+                    curEntry += event.key.toLowerCase();
                 }
                 this.updateText(curEntry, this.currentFocus);
             } else if (event.keyCode === bscode && curEntry.length) {
@@ -116,15 +127,16 @@ class LoginScene extends Phaser.Scene {
         }, this);
         this.usernameBox.setInteractive({ cursor: 'pointer' });
         this.usernameBox.on('pointerdown', function(pointer) {
+            this.realInput.focus({preventScroll: true});
             this.setUsernameFocus();
         }, this);
         this.passwordBox.setInteractive({ cursor: 'pointer' });
         this.passwordBox.on('pointerdown', function(pointer) {
+            this.realInput.focus({preventScroll: true});
             this.setPasswordFocus();
         }, this);
     }
     update(time, delta) {
-        
     }
 
     updateLoginSprites() {
