@@ -4,15 +4,14 @@ import globalConfig from './global-config.js';
 import SystemState from './state-machine.js';
 
 class BlankScreenScene extends Phaser.Scene {
-    bootingText = "Booting";
-    currentTextDisplayed = "";
-    characterWidth = 10;
-    timePerCharacter = 250;
-    cursorBlinkTime = 500;
-    startPos = globalConfig.frameWidth + 10;
-    booting = false;
-
     init() {
+        this.bootingText = "Booting";
+        this.currentTextDisplayed = "";
+        this.characterWidth = 10;
+        this.timePerCharacter = 250;
+        this.cursorBlinkTime = 500;
+        this.startPos = globalConfig.frameWidth + 10;
+        this.booting = false;
         console.log("Blank Screen Init");
     }
     create() {

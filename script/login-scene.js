@@ -8,10 +8,12 @@ const focusColor = 0x03c2fc;
 const wrongColor = 0xfc0303;
 
 class LoginScene extends Phaser.Scene {
-    typedUsername = "";
-    typedPassword = "";
-    currentFocus = "username";
-    maxChars = 14;
+    init() {
+        this.typedUsername = "";
+        this.typedPassword = "";
+        this.currentFocus = "username";
+        this.maxChars = 14;
+    }
 
     create() {
         // Audio
