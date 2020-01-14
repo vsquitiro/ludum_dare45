@@ -52,7 +52,9 @@ Gnob Debop
 `
 
 class FrameScene extends Phaser.Scene {
-    folderOpen = false;
+    init() {
+        this.folderOpen = false;
+    }
 
     create() {
         this.lightClick = this.sound.add('lightClick');

@@ -2,7 +2,7 @@
 
 import SystemState from "./state-machine.js";
 import config from './global-config.js';
-import loader from './loader-scene.js';
+import Loader from './loader-scene.js';
 import Menu from './menu-scene.js';
 
 const gameConfig = {
@@ -14,7 +14,7 @@ const gameConfig = {
 
 const game = new Phaser.Game(gameConfig);
 
-game.scene.add('loader', loader, true);
+game.scene.add('loader', Loader, true);
 game.scene.add('menu', Menu, false);
 
 SystemState.setGame(game);

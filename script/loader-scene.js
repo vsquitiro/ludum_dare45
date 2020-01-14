@@ -3,9 +3,9 @@
 import {screenHeight, screenWidth} from './global-config.js';
 
 class Loader extends Phaser.Scene {
-    key = 'loader';
     constructor(config) {
         config = config || {};
+        config.key = "loader";
         config.pack = {
             files: [
                 {
